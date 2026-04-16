@@ -3,76 +3,51 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>标注任务选择</title>
+<title>CaseReview - 标注任务</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
 
-  .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 32px 40px; }
-  .header h1 { font-size: 28px; font-weight: 700; }
-  .header p { margin-top: 8px; opacity: 0.85; font-size: 15px; }
+  /* Header */
+  .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .header-left h1 { font-size: 26px; font-weight: 700; }
+  .header-left p { margin-top: 4px; opacity: 0.85; font-size: 14px; }
+  .header-actions { display: flex; gap: 10px; align-items: center; }
+  .header-btn { padding: 9px 18px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.12); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 6px; }
+  .header-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.7); }
+  .header-btn svg { width: 16px; height: 16px; }
+  .header-btn-solid { background: #fff; color: #667eea; border-color: #fff; }
+  .header-btn-solid:hover { background: #f0f0ff; }
+  #csvFileInput { display: none; }
 
-  .stats-bar { display: flex; gap: 24px; padding: 20px 40px; background: #fff; border-bottom: 1px solid #e8e8e8; flex-wrap: wrap; }
+  /* Stats */
+  .stats-bar { display: flex; gap: 24px; padding: 18px 40px; background: #fff; border-bottom: 1px solid #e8e8e8; flex-wrap: wrap; }
   .stat { display: flex; flex-direction: column; }
-  .stat-value { font-size: 24px; font-weight: 700; color: #667eea; }
-  .stat-label { font-size: 13px; color: #888; margin-top: 2px; }
+  .stat-value { font-size: 22px; font-weight: 700; color: #667eea; }
+  .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
 
-  .controls { padding: 20px 40px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
-  .filter-group { display: flex; align-items: center; gap: 8px; }
-  .filter-group label { font-size: 14px; font-weight: 600; color: #555; white-space: nowrap; }
-  select { padding: 8px 12px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 14px; background: #fff; cursor: pointer; outline: none; }
+  /* Controls */
+  .controls { padding: 16px 40px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  .filter-group { display: flex; align-items: center; gap: 6px; }
+  .filter-group label { font-size: 13px; font-weight: 600; color: #555; white-space: nowrap; }
+  select { padding: 7px 12px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 13px; background: #fff; cursor: pointer; outline: none; }
   select:focus { border-color: #667eea; box-shadow: 0 0 0 2px rgba(102,126,234,0.15); }
+  .search-box { padding: 7px 14px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 13px; width: 180px; outline: none; }
+  .search-box:focus { border-color: #667eea; box-shadow: 0 0 0 2px rgba(102,126,234,0.15); }
 
   .view-toggle { margin-left: auto; display: flex; gap: 4px; background: #f0f0f0; border-radius: 8px; padding: 3px; }
   .view-btn { padding: 6px 16px; border: none; background: transparent; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; color: #666; transition: all .2s; }
   .view-btn.active { background: #fff; color: #667eea; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
 
-  .search-box { padding: 8px 14px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 14px; width: 200px; outline: none; }
-  .search-box:focus { border-color: #667eea; box-shadow: 0 0 0 2px rgba(102,126,234,0.15); }
-
   .container { padding: 20px 40px 40px; }
 
-  /* Table View */
-  .table-view { width: 100%; border-collapse: separate; border-spacing: 0; background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.08); }
-  .table-view th { background: #fafafa; padding: 14px 16px; text-align: left; font-size: 13px; font-weight: 600; color: #555; border-bottom: 1px solid #eee; position: sticky; top: 0; }
-  .table-view td { padding: 12px 16px; font-size: 14px; border-bottom: 1px solid #f5f5f5; }
-  .table-view tr:last-child td { border-bottom: none; }
-  .table-view tbody tr { cursor: pointer; transition: background .15s; }
-  .table-view tbody tr:hover { background: #f8f7ff; }
-
-  /* Card View */
-  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-  .card { background: #fff; border-radius: 12px; padding: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.08); cursor: pointer; transition: all .2s; border: 2px solid transparent; position: relative; overflow: hidden; }
-  .card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.12); border-color: #667eea; }
-  .card-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; }
-  .card-id { font-size: 12px; color: #aaa; font-weight: 500; }
-  .card-title { font-size: 16px; font-weight: 700; color: #1a1a2e; }
-  .card-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
-
-  /* Tags / Badges */
-  .tag { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
+  /* Tags */
+  .tag { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
   .tag-lang { background: #eef2ff; color: #4f46e5; }
   .tag-cat { background: #fef3c7; color: #b45309; }
   .tag-tier-head { background: #dcfce7; color: #15803d; }
   .tag-tier-mid { background: #e0f2fe; color: #0369a1; }
   .tag-tier-tail { background: #fce7f3; color: #be185d; }
-
-  .case-count { font-size: 13px; color: #888; margin-top: 10px; }
-
-  /* Progress */
-  .progress-bar { height: 4px; background: #f0f0f0; border-radius: 2px; margin-top: 8px; overflow: hidden; }
-  .progress-fill { height: 100%; border-radius: 2px; transition: width .3s; }
-  .progress-fill.done { background: #22c55e; }
-  .progress-fill.partial { background: #f59e0b; }
-  .progress-fill.empty { background: #e5e7eb; width: 0; }
-
-  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; margin-right: 6px; }
-  .status-done { background: #22c55e; }
-  .status-partial { background: #f59e0b; }
-  .status-todo { background: #d1d5db; }
-
-  /* Group header in table */
-  .group-header td { background: #f8f7ff; font-weight: 700; color: #667eea; font-size: 15px; padding: 10px 16px; }
 
   /* Matrix View — block style */
   .lang-blocks { display: flex; flex-direction: column; gap: 24px; }
@@ -95,120 +70,195 @@
   .block-cell.done .block-count { color: #16a34a; }
   .block-cell .block-check { font-size: 18px; color: #22c55e; }
 
-  /* Modal */
-  .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 1000; }
-  .modal-overlay.show { display: flex; }
-  .modal { background: #fff; border-radius: 16px; width: 90%; max-width: 640px; max-height: 80vh; overflow-y: auto; padding: 32px; box-shadow: 0 20px 60px rgba(0,0,0,0.3); }
-  .modal h2 { font-size: 20px; margin-bottom: 8px; }
-  .modal .modal-meta { color: #888; font-size: 14px; margin-bottom: 20px; }
-  .modal-cases { display: flex; flex-direction: column; gap: 8px; }
-  .case-item { display: flex; align-items: center; gap: 12px; padding: 12px 16px; background: #fafafa; border-radius: 10px; font-size: 14px; }
-  .case-item:hover { background: #f0eeff; }
-  .case-checkbox { width: 20px; height: 20px; accent-color: #667eea; cursor: pointer; }
-  .case-label { flex: 1; }
-  .case-status { font-size: 12px; font-weight: 600; padding: 3px 10px; border-radius: 12px; }
-  .case-status.pending { background: #f3f4f6; color: #9ca3af; }
-  .case-status.completed { background: #dcfce7; color: #15803d; }
-  .modal-close { position: absolute; top: 16px; right: 20px; background: none; border: none; font-size: 24px; cursor: pointer; color: #999; }
-  .modal-actions { margin-top: 20px; display: flex; gap: 12px; justify-content: flex-end; }
-  .btn { padding: 10px 20px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s; }
+  /* List View — grouped by category, 30 per card (head+mid+tail) */
+  .list-groups { display: flex; flex-direction: column; gap: 20px; }
+  .list-group-card { background: #fff; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); overflow: hidden; }
+  .list-group-header { padding: 16px 24px; background: #fafafa; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 12px; }
+  .list-group-title { font-size: 16px; font-weight: 700; color: #1a1a2e; }
+  .list-group-count { margin-left: auto; font-size: 13px; color: #888; }
+  .list-tier-section { padding: 4px 0; }
+  .list-tier-label { padding: 8px 24px 4px; font-size: 12px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
+  .list-row { display: flex; align-items: center; padding: 10px 24px; gap: 16px; cursor: pointer; transition: background .12s; border-bottom: 1px solid #f5f5f5; }
+  .list-row:last-child { border-bottom: none; }
+  .list-row:hover { background: #f8f7ff; }
+  .list-row-id { font-size: 13px; color: #aaa; font-weight: 500; min-width: 80px; }
+  .list-row-name { flex: 1; font-size: 14px; font-weight: 500; }
+  .list-row-meta { font-size: 12px; color: #999; min-width: 100px; text-align: right; }
+  .list-row-status { width: 8px; height: 8px; border-radius: 50; }
+  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+  .status-done { background: #22c55e; }
+  .status-partial { background: #f59e0b; }
+  .status-todo { background: #d1d5db; }
+
+  /* ====== DETAIL PAGE (replaces modal) ====== */
+  .detail-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 1000; overflow-y: auto; }
+  .detail-overlay.show { display: block; }
+  .detail-page { background: #f0f2f5; min-height: 100vh; max-width: 1200px; margin: 0 auto; }
+
+  .detail-topbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 20px 32px; display: flex; align-items: center; gap: 16px; }
+  .detail-back { background: rgba(255,255,255,0.15); border: none; color: #fff; width: 36px; height: 36px; border-radius: 8px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s; flex-shrink: 0; }
+  .detail-back:hover { background: rgba(255,255,255,0.3); }
+  .detail-context { font-size: 16px; font-weight: 500; }
+  .detail-nav { margin-left: auto; display: flex; gap: 8px; }
+  .detail-nav-btn { background: rgba(255,255,255,0.15); border: none; color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: background .15s; }
+  .detail-nav-btn:hover { background: rgba(255,255,255,0.3); }
+  .detail-nav-btn:disabled { opacity: 0.4; cursor: default; }
+
+  .detail-body { padding: 24px 32px; }
+
+  /* Author info card */
+  .author-card { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 20px; }
+  .author-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
+  .author-avatar { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; font-weight: 700; flex-shrink: 0; }
+  .author-name { font-size: 18px; font-weight: 700; }
+  .author-uid { font-size: 13px; color: #999; margin-top: 2px; }
+  .author-metrics { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
+  .metric-item { background: #f8f9fa; border-radius: 10px; padding: 12px 16px; }
+  .metric-label { font-size: 11px; color: #888; font-weight: 500; text-transform: uppercase; letter-spacing: 0.3px; }
+  .metric-value { font-size: 18px; font-weight: 700; color: #1a1a2e; margin-top: 4px; }
+  .metric-value.pgc80 { color: #16a34a; }
+  .metric-value.pgc60 { color: #d97706; }
+  .metric-value.nonpgc { color: #dc2626; }
+
+  /* Video section */
+  .video-section { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 20px; }
+  .video-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
+  .video-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
+  .video-tab { padding: 8px 16px; border: 1.5px solid #e5e7eb; border-radius: 8px; background: #fff; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; color: #555; }
+  .video-tab.active { border-color: #667eea; background: #eef2ff; color: #667eea; font-weight: 600; }
+  .video-tab:hover { border-color: #667eea; }
+  .video-container { display: flex; justify-content: center; min-height: 200px; }
+  .video-container iframe { border: none; border-radius: 12px; }
+  .video-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ccc; gap: 8px; padding: 40px; }
+  .video-placeholder svg { width: 48px; height: 48px; }
+
+  /* Annotation section */
+  .annotation-section { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 20px; }
+  .annotation-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
+  .annotation-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
+  .annotation-field { }
+  .annotation-label { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 8px; }
+  .annotation-options { display: flex; gap: 8px; flex-wrap: wrap; }
+  .anno-btn { padding: 8px 16px; border: 1.5px solid #e5e7eb; border-radius: 8px; background: #fff; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; color: #555; }
+  .anno-btn:hover { border-color: #667eea; background: #f8f7ff; }
+  .anno-btn.selected { border-color: #667eea; background: #667eea; color: #fff; }
+  .anno-select { padding: 9px 14px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 13px; background: #fff; cursor: pointer; outline: none; min-width: 200px; }
+  .anno-select:focus { border-color: #667eea; box-shadow: 0 0 0 2px rgba(102,126,234,0.15); }
+
+  .annotation-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; align-items: center; }
+  .save-hint { font-size: 13px; color: #22c55e; font-weight: 500; display: none; }
+  .save-hint.show { display: block; }
+  .btn { padding: 10px 24px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s; }
   .btn-primary { background: #667eea; color: #fff; }
   .btn-primary:hover { background: #5a6fd6; }
   .btn-secondary { background: #f0f0f0; color: #555; }
   .btn-secondary:hover { background: #e5e5e5; }
+  .btn-danger { background: #fee2e2; color: #dc2626; }
+  .btn-danger:hover { background: #fecaca; }
+  .btn-skip { background: #fef3c7; color: #92400e; }
+  .btn-skip:hover { background: #fde68a; }
 
   .hidden { display: none !important; }
 
+  /* Empty state */
+  .empty-state { text-align: center; padding: 80px 40px; color: #aaa; }
+  .empty-state svg { width: 64px; height: 64px; margin-bottom: 16px; }
+  .empty-state h3 { font-size: 18px; color: #666; margin-bottom: 8px; }
+  .empty-state p { font-size: 14px; }
+
   @media (max-width: 768px) {
-    .header, .stats-bar, .controls, .container { padding-left: 20px; padding-right: 20px; }
-    .card-grid { grid-template-columns: 1fr; }
+    .header, .stats-bar, .controls, .container { padding-left: 16px; padding-right: 16px; }
+    .detail-body { padding: 16px; }
+    .author-metrics { grid-template-columns: repeat(2, 1fr); }
+    .annotation-grid { grid-template-columns: 1fr; }
   }
 </style>
 </head>
 <body>
 
-<div class="header">
-  <h1>标注任务选择</h1>
-  <p>多语言 x 内容垂类 x 流量层级 — 共 75 组 / 750 个 Case</p>
+<div id="mainPage">
+  <div class="header">
+    <div class="header-left">
+      <h1>CaseReview</h1>
+      <p id="headerDesc">多语言 x 内容垂类 x 流量层级 — 共 75 组 / 750 个作者</p>
+    </div>
+    <div class="header-actions">
+      <label class="header-btn" for="csvFileInput">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+        上传 CSV
+      </label>
+      <input type="file" id="csvFileInput" accept=".csv">
+      <button class="header-btn header-btn-solid" onclick="exportResults()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        导出结果
+      </button>
+    </div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-value" id="statTotal">75</span><span class="stat-label">总标注组</span></div>
+    <div class="stat"><span class="stat-value" id="statCases">750</span><span class="stat-label">总作者数</span></div>
+    <div class="stat"><span class="stat-value" id="statDone">0</span><span class="stat-label">已完成</span></div>
+    <div class="stat"><span class="stat-value" id="statProgress">0%</span><span class="stat-label">完成进度</span></div>
+    <div class="stat"><span class="stat-value" id="statFiltered">75</span><span class="stat-label">当前筛选</span></div>
+  </div>
+
+  <div class="controls">
+    <div class="filter-group">
+      <label>语言</label>
+      <select id="filterLang"><option value="all">全部</option></select>
+    </div>
+    <div class="filter-group">
+      <label>垂类</label>
+      <select id="filterCat"><option value="all">全部</option></select>
+    </div>
+    <div class="filter-group">
+      <label>层级</label>
+      <select id="filterTier"><option value="all">全部</option></select>
+    </div>
+    <div class="filter-group">
+      <label>状态</label>
+      <select id="filterStatus">
+        <option value="all">全部</option>
+        <option value="todo">未开始</option>
+        <option value="partial">进行中</option>
+        <option value="done">已完成</option>
+      </select>
+    </div>
+    <input class="search-box" type="text" placeholder="搜索..." id="searchBox">
+    <div class="view-toggle">
+      <button class="view-btn active" data-view="matrix">矩阵</button>
+      <button class="view-btn" data-view="list">列表</button>
+    </div>
+  </div>
+
+  <div class="container">
+    <div id="matrixView"></div>
+    <div id="listView" class="hidden"></div>
+  </div>
 </div>
 
-<div class="stats-bar" id="statsBar">
-  <div class="stat"><span class="stat-value" id="statTotal">75</span><span class="stat-label">总标注组</span></div>
-  <div class="stat"><span class="stat-value" id="statCases">750</span><span class="stat-label">总 Case 数</span></div>
-  <div class="stat"><span class="stat-value" id="statDone">0</span><span class="stat-label">已完成组</span></div>
-  <div class="stat"><span class="stat-value" id="statProgress">0%</span><span class="stat-label">完成进度</span></div>
-  <div class="stat"><span class="stat-value" id="statFiltered">75</span><span class="stat-label">当前筛选</span></div>
-</div>
-
-<div class="controls">
-  <div class="filter-group">
-    <label>语言</label>
-    <select id="filterLang">
-      <option value="all">全部</option>
-      <option value="英语">英语</option>
-      <option value="韩语">韩语</option>
-      <option value="德语">德语</option>
-      <option value="西语">西语</option>
-      <option value="日语">日语</option>
-    </select>
-  </div>
-  <div class="filter-group">
-    <label>垂类</label>
-    <select id="filterCat">
-      <option value="all">全部</option>
-      <option value="影视">影视</option>
-      <option value="体育">体育</option>
-      <option value="新闻">新闻</option>
-      <option value="知识">知识</option>
-      <option value="其他">其他</option>
-    </select>
-  </div>
-  <div class="filter-group">
-    <label>层级</label>
-    <select id="filterTier">
-      <option value="all">全部</option>
-      <option value="头部">头部</option>
-      <option value="中部">中部</option>
-      <option value="尾部">尾部</option>
-    </select>
-  </div>
-  <div class="filter-group">
-    <label>状态</label>
-    <select id="filterStatus">
-      <option value="all">全部</option>
-      <option value="todo">未开始</option>
-      <option value="partial">进行中</option>
-      <option value="done">已完成</option>
-    </select>
-  </div>
-  <input class="search-box" type="text" placeholder="搜索组名..." id="searchBox">
-  <div class="view-toggle">
-    <button class="view-btn active" data-view="matrix">矩阵</button>
-    <button class="view-btn" data-view="card">卡片</button>
-    <button class="view-btn" data-view="table">列表</button>
-  </div>
-</div>
-
-<div class="container">
-  <div id="matrixView"></div>
-  <div id="cardView" class="card-grid hidden"></div>
-  <div id="tableView" class="hidden"></div>
-</div>
-
-<div class="modal-overlay" id="modalOverlay">
-  <div class="modal" style="position:relative;">
-    <button class="modal-close" id="modalClose">&times;</button>
-    <h2 id="modalTitle"></h2>
-    <div class="modal-meta" id="modalMeta"></div>
-    <div class="modal-cases" id="modalCases"></div>
-    <div class="modal-actions">
-      <button class="btn btn-secondary" id="modalReset">重置</button>
-      <button class="btn btn-primary" id="modalDoneAll">全部完成</button>
+<!-- Detail overlay (full page) -->
+<div class="detail-overlay" id="detailOverlay">
+  <div class="detail-page">
+    <div class="detail-topbar">
+      <button class="detail-back" onclick="closeDetail()">&larr;</button>
+      <div class="detail-context" id="detailContext"></div>
+      <div class="detail-nav">
+        <button class="detail-nav-btn" id="prevCaseBtn" onclick="navCase(-1)">&larr; 上一个</button>
+        <button class="detail-nav-btn" id="nextCaseBtn" onclick="navCase(1)">下一个 &rarr;</button>
+      </div>
+    </div>
+    <div class="detail-body">
+      <div class="author-card" id="authorCard"></div>
+      <div class="video-section" id="videoSection"></div>
+      <div class="annotation-section" id="annotationSection"></div>
     </div>
   </div>
 </div>
 
 <script>
+// ============== CONSTANTS ==============
 const LANGS = ['英语', '韩语', '德语', '西语', '日语'];
 const CATS = ['影视', '体育', '新闻', '知识', '其他'];
 const TIERS = ['头部', '中部', '尾部'];
@@ -218,36 +268,96 @@ const LANG_EMOJI = { '英语': '🇺🇸', '韩语': '🇰🇷', '德语': '🇩
 const CAT_EMOJI = { '影视': '🎬', '体育': '⚽', '新闻': '📰', '知识': '📚', '其他': '💡' };
 const TIER_CLASS = { '头部': 'tag-tier-head', '中部': 'tag-tier-mid', '尾部': 'tag-tier-tail' };
 
-// Initialize groups
-let groups = [];
-let idCounter = 1;
-LANGS.forEach(lang => {
-  CATS.forEach(cat => {
-    TIERS.forEach(tier => {
-      const cases = Array.from({ length: CASES_PER_GROUP }, (_, i) => ({
-        id: `C${String((idCounter - 1) * CASES_PER_GROUP + i + 1).padStart(4, '0')}`,
-        done: false
-      }));
-      groups.push({ id: idCounter++, lang, cat, tier, cases });
+const PGC_TYPES = ['PGC80', 'PGC60', 'nonPGC'];
+const PROD_SCORES = ['0', '1', '2'];
+const CONTENT_SCORES = ['0', '1', '2'];
+const STYLE_OPTIONS = ['AI解说', '真人解说', '街头采访', '自制喜剧', 'Vlog', '测评'];
+
+// ============== FAKE DATA GENERATION ==============
+const FAKE_NAMES = {
+  '英语': ['SportsFan_James','MovieBuff_Sarah','NewsDaily_Tom','TechGuru_Alex','FunnyMike','CinemaKing','GoalMaster','CNN_Mini','SciShow_Lite','RandomDave','ActionClips','NBA_Recap','DailyBrief','LearnFast','LifeHacks','FilmNerd','SoccerPro','HeadlineHero','BrainBites','ChillVibes'],
+  '韩语': ['축구왕_민수','영화리뷰_지현','뉴스톡_준호','지식왕_수진','일상로그_현우','시네마_은지','골잡이_태양','뉴스브리핑','공부왕_소영','힐링_도윤','드라마팬_유리','스포츠매니아','오늘뉴스','과학쏙쏙','재미난일상'],
+  '德语': ['FilmKritik_Max','SportWelt_Lukas','NachrichtenNow','WissenPlus_Anna','SpassMacher_Tim','KinoFan_Lena','TorJaeger','TagesSchau_Mini','LernMitMir','AllesGut_Felix','FilmTipp_Eva','BundesligaFan','NewsFlash_DE','SchlauKopf','LifeInBerlin'],
+  '西语': ['CineFan_Carlos','GolDeportivo','NoticiasHoy_Ana','SaberMas_Luis','VibeLatina_Sol','PeliculaTop','FutbolTotal','InfoRapida','CurisoMente','RisasYMas','CineClub_Mex','DeporteVivo','AlDia_News','AprendoYa','LocosDRisa'],
+  '日语': ['映画好き_太郎','サッカー魂_翔','ニュース速報_花','知識の泉_健','おもしろ動画_美咲','シネマ通_陸','ゴール集_蓮','今日のニュース','学びチャンネル','日常vlog_結衣','映画レビュー','スポーツ王','ニュースまとめ','雑学王','ほのぼの日記']
+};
+
+function generateFakeData() {
+  let groups = [];
+  let gid = 1;
+  LANGS.forEach(lang => {
+    CATS.forEach(cat => {
+      TIERS.forEach(tier => {
+        const names = FAKE_NAMES[lang] || FAKE_NAMES['英語'];
+        const cases = Array.from({ length: CASES_PER_GROUP }, (_, i) => {
+          const uid = String(Math.floor(Math.random() * 9000000000) + 1000000000);
+          const namePool = names.length;
+          const name = names[(gid * 3 + i) % namePool] + (i > 0 ? i : '');
+          const followers = tier === '头部' ? Math.floor(Math.random() * 5000000) + 500000
+                          : tier === '中部' ? Math.floor(Math.random() * 400000) + 50000
+                          : Math.floor(Math.random() * 40000) + 1000;
+          const monthlyIncome = tier === '头部' ? Math.floor(Math.random() * 50000) + 5000
+                              : tier === '中部' ? Math.floor(Math.random() * 5000) + 500
+                              : Math.floor(Math.random() * 500) + 10;
+          const monthlyPosts = Math.floor(Math.random() * 30) + 1;
+          const pgcOptions = ['PGC80', 'PGC60', 'nonPGC'];
+          const pgcScore = pgcOptions[Math.floor(Math.random() * 3)];
+          const prodScore = Math.floor(Math.random() * 3);
+          const contentScore = Math.floor(Math.random() * 3);
+          const vids = Array.from({ length: 5 }, () => String(Math.floor(Math.random() * 9000000000000000) + 1000000000000000));
+          return {
+            user_id: uid,
+            username: name,
+            followers,
+            monthly_income: monthlyIncome,
+            monthly_posts: monthlyPosts,
+            pgc_score: pgcScore,
+            production_score: prodScore,
+            content_score: contentScore,
+            vids,
+            annotation: null
+          };
+        });
+        groups.push({ id: gid++, lang, cat, tier, cases });
+      });
     });
   });
-});
-
-// Persist to localStorage
-function save() { localStorage.setItem('annotation_groups', JSON.stringify(groups)); }
-function load() {
-  const d = localStorage.getItem('annotation_groups');
-  if (d) { try { groups = JSON.parse(d); } catch(e) {} }
+  return groups;
 }
-load();
 
-function getStatus(g) {
-  const done = g.cases.filter(c => c.done).length;
+// ============== STATE ==============
+let groups = [];
+let currentGroupId = null;
+let currentCaseIdx = 0;
+
+function save() {
+  localStorage.setItem('casereview_v2', JSON.stringify(groups));
+}
+function load() {
+  const d = localStorage.getItem('casereview_v2');
+  if (d) { try { groups = JSON.parse(d); return true; } catch(e) {} }
+  return false;
+}
+if (!load()) {
+  groups = generateFakeData();
+  save();
+}
+
+// ============== HELPERS ==============
+function getCaseStatus(c) { return c.annotation ? 'done' : 'todo'; }
+function getGroupDone(g) { return g.cases.filter(c => c.annotation).length; }
+function getGroupStatus(g) {
+  const done = getGroupDone(g);
   if (done === 0) return 'todo';
-  if (done === CASES_PER_GROUP) return 'done';
+  if (done === g.cases.length) return 'done';
   return 'partial';
 }
-function getDoneCount(g) { return g.cases.filter(c => c.done).length; }
+
+function formatNum(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000) return (n / 1000).toFixed(1) + 'K';
+  return String(n);
+}
 
 function getFiltered() {
   const lang = document.getElementById('filterLang').value;
@@ -259,22 +369,43 @@ function getFiltered() {
     if (lang !== 'all' && g.lang !== lang) return false;
     if (cat !== 'all' && g.cat !== cat) return false;
     if (tier !== 'all' && g.tier !== tier) return false;
-    if (status !== 'all' && getStatus(g) !== status) return false;
+    if (status !== 'all' && getGroupStatus(g) !== status) return false;
     if (q && !`${g.lang} ${g.cat} ${g.tier}`.toLowerCase().includes(q)) return false;
     return true;
   });
 }
 
+// ============== POPULATE FILTERS ==============
+function populateFilters() {
+  const setOpts = (id, values) => {
+    const sel = document.getElementById(id);
+    const current = sel.value;
+    sel.innerHTML = '<option value="all">全部</option>';
+    values.forEach(v => { sel.innerHTML += `<option value="${v}">${v}</option>`; });
+    sel.value = current || 'all';
+  };
+  setOpts('filterLang', LANGS);
+  setOpts('filterCat', CATS);
+  setOpts('filterTier', TIERS);
+}
+populateFilters();
+
+// ============== STATS ==============
 function updateStats() {
   const filtered = getFiltered();
-  const doneGroups = groups.filter(g => getStatus(g) === 'done').length;
-  const totalDoneCases = groups.reduce((s, g) => s + getDoneCount(g), 0);
-  document.getElementById('statDone').textContent = doneGroups;
-  document.getElementById('statProgress').textContent = Math.round(totalDoneCases / 750 * 100) + '%';
+  const totalCases = groups.reduce((s, g) => s + g.cases.length, 0);
+  const totalDone = groups.reduce((s, g) => s + getGroupDone(g), 0);
+  const doneGroups = groups.filter(g => getGroupStatus(g) === 'done').length;
+  document.getElementById('statTotal').textContent = groups.length;
+  document.getElementById('statCases').textContent = totalCases;
+  document.getElementById('statDone').textContent = totalDone;
+  document.getElementById('statProgress').textContent = totalCases ? Math.round(totalDone / totalCases * 100) + '%' : '0%';
   document.getElementById('statFiltered').textContent = filtered.length;
+  document.getElementById('headerDesc').textContent =
+    `多语言 x 内容垂类 x 流量层级 — 共 ${groups.length} 组 / ${totalCases} 个作者`;
 }
 
-// === MATRIX VIEW (Block Style) ===
+// ============== MATRIX VIEW ==============
 function renderMatrix() {
   const filtered = getFiltered();
   const container = document.getElementById('matrixView');
@@ -282,35 +413,32 @@ function renderMatrix() {
   LANGS.forEach(lang => {
     const langGroups = filtered.filter(g => g.lang === lang);
     if (langGroups.length === 0) return;
-    const langDone = langGroups.reduce((s, g) => s + getDoneCount(g), 0);
-    const langTotal = langGroups.length * CASES_PER_GROUP;
+    const langDone = langGroups.reduce((s, g) => s + getGroupDone(g), 0);
+    const langTotal = langGroups.reduce((s, g) => s + g.cases.length, 0);
     html += `<div class="lang-block">
       <div class="lang-block-header">
-        <span class="lang-emoji">${LANG_EMOJI[lang]}</span>
+        <span class="lang-emoji">${LANG_EMOJI[lang] || ''}</span>
         <span class="lang-name">${lang}</span>
-        <span class="lang-progress">${langDone} / ${langTotal} cases</span>
-      </div>`;
-    // Column headers
-    html += `<div class="block-grid">`;
-    CATS.forEach(cat => {
-      html += `<div class="block-col-header">${CAT_EMOJI[cat]} ${cat}</div>`;
-    });
-    // Cells: for each tier, one row of 5 cats
+        <span class="lang-progress">${langDone} / ${langTotal} 作者</span>
+      </div>
+      <div class="block-grid">`;
+    CATS.forEach(cat => { html += `<div class="block-col-header">${CAT_EMOJI[cat] || ''} ${cat}</div>`; });
     TIERS.forEach(tier => {
       CATS.forEach(cat => {
         const g = langGroups.find(x => x.cat === cat && x.tier === tier);
         if (g) {
-          const st = getStatus(g);
-          const done = getDoneCount(g);
+          const st = getGroupStatus(g);
+          const done = getGroupDone(g);
+          const total = g.cases.length;
           const content = st === 'done'
             ? `<span class="block-check">✓</span>`
-            : `<span class="block-count">${done}/${CASES_PER_GROUP}</span>`;
-          html += `<div class="block-cell ${st}" onclick="openModal(${g.id})">
+            : `<span class="block-count">${done}/${total}</span>`;
+          html += `<div class="block-cell ${st}" onclick="openGroup(${g.id})">
             <span class="block-tier"><span class="tag ${TIER_CLASS[tier]}" style="font-size:11px;padding:2px 8px">${tier}</span></span>
             ${content}
           </div>`;
         } else {
-          html += `<div class="block-cell" style="opacity:0.2;cursor:default">
+          html += `<div class="block-cell" style="opacity:0.15;cursor:default">
             <span class="block-tier">${tier}</span>
             <span class="block-count">—</span>
           </div>`;
@@ -323,61 +451,56 @@ function renderMatrix() {
   container.innerHTML = html;
 }
 
-// === CARD VIEW ===
-function renderCards() {
+// ============== LIST VIEW (grouped by lang+cat, 30 per card) ==============
+function renderList() {
   const filtered = getFiltered();
-  const container = document.getElementById('cardView');
-  container.innerHTML = filtered.map(g => {
-    const st = getStatus(g);
-    const done = getDoneCount(g);
-    const pct = done / CASES_PER_GROUP * 100;
-    return `
-      <div class="card" onclick="openModal(${g.id})">
-        <div class="card-header">
-          <span class="card-id">#${String(g.id).padStart(3, '0')}</span>
-          <span class="status-dot status-${st}"></span>
-        </div>
-        <div class="card-title">${LANG_EMOJI[g.lang]} ${g.lang} — ${CAT_EMOJI[g.cat]} ${g.cat}</div>
-        <div class="card-tags">
-          <span class="tag tag-lang">${g.lang}</span>
-          <span class="tag tag-cat">${g.cat}</span>
-          <span class="tag ${TIER_CLASS[g.tier]}">${g.tier}</span>
-        </div>
-        <div class="case-count">${done} / ${CASES_PER_GROUP} cases 已完成</div>
-        <div class="progress-bar"><div class="progress-fill ${st === 'done' ? 'done' : st === 'partial' ? 'partial' : 'empty'}" style="width:${pct}%"></div></div>
-      </div>`;
-  }).join('');
-}
-
-// === TABLE VIEW ===
-function renderTable() {
-  const filtered = getFiltered();
-  const container = document.getElementById('tableView');
-  let html = `<table class="table-view"><thead><tr>
-    <th>#</th><th>语言</th><th>垂类</th><th>层级</th><th>进度</th><th>状态</th>
-  </tr></thead><tbody>`;
+  const container = document.getElementById('listView');
+  // Group by lang + cat (each has head+mid+tail = up to 30 cases)
+  const grouped = {};
   filtered.forEach(g => {
-    const st = getStatus(g);
-    const done = getDoneCount(g);
-    const statusLabel = st === 'done' ? '已完成' : st === 'partial' ? '进行中' : '未开始';
-    html += `<tr onclick="openModal(${g.id})">
-      <td>${String(g.id).padStart(3, '0')}</td>
-      <td>${LANG_EMOJI[g.lang]} ${g.lang}</td>
-      <td>${CAT_EMOJI[g.cat]} ${g.cat}</td>
-      <td><span class="tag ${TIER_CLASS[g.tier]}">${g.tier}</span></td>
-      <td>${done}/${CASES_PER_GROUP}</td>
-      <td><span class="status-dot status-${st}"></span>${statusLabel}</td>
-    </tr>`;
+    const key = `${g.lang}|${g.cat}`;
+    if (!grouped[key]) grouped[key] = [];
+    grouped[key].push(g);
   });
-  html += `</tbody></table>`;
+
+  let html = '<div class="list-groups">';
+  Object.entries(grouped).forEach(([key, grps]) => {
+    const [lang, cat] = key.split('|');
+    const totalCases = grps.reduce((s, g) => s + g.cases.length, 0);
+    const doneCases = grps.reduce((s, g) => s + getGroupDone(g), 0);
+    html += `<div class="list-group-card">
+      <div class="list-group-header">
+        <span class="list-group-title">${LANG_EMOJI[lang] || ''} ${lang} ${CAT_EMOJI[cat] || ''} ${cat}</span>
+        <span class="list-group-count">${doneCases} / ${totalCases} 已完成</span>
+      </div>`;
+
+    // Sort by tier order
+    const tierOrder = { '头部': 0, '中部': 1, '尾部': 2 };
+    grps.sort((a, b) => (tierOrder[a.tier] || 0) - (tierOrder[b.tier] || 0));
+
+    grps.forEach(g => {
+      html += `<div class="list-tier-section">
+        <div class="list-tier-label"><span class="tag ${TIER_CLASS[g.tier]}">${g.tier}</span></div>`;
+      g.cases.forEach((c, ci) => {
+        const st = getCaseStatus(c);
+        html += `<div class="list-row" onclick="openGroup(${g.id}, ${ci})">
+          <span class="status-dot status-${st}"></span>
+          <span class="list-row-id">${c.user_id}</span>
+          <span class="list-row-name">${c.username}</span>
+          <span class="list-row-meta">${formatNum(c.followers)} 粉丝</span>
+        </div>`;
+      });
+      html += `</div>`;
+    });
+    html += `</div>`;
+  });
+  html += '</div>';
   container.innerHTML = html;
 }
 
-function renderAll() {
-  renderMatrix(); renderCards(); renderTable(); updateStats();
-}
+function renderAll() { renderMatrix(); renderList(); updateStats(); }
 
-// View toggle
+// ============== VIEW TOGGLE ==============
 let currentView = 'matrix';
 document.querySelectorAll('.view-btn').forEach(btn => {
   btn.addEventListener('click', () => {
@@ -385,8 +508,7 @@ document.querySelectorAll('.view-btn').forEach(btn => {
     btn.classList.add('active');
     currentView = btn.dataset.view;
     document.getElementById('matrixView').classList.toggle('hidden', currentView !== 'matrix');
-    document.getElementById('cardView').classList.toggle('hidden', currentView !== 'card');
-    document.getElementById('tableView').classList.toggle('hidden', currentView !== 'table');
+    document.getElementById('listView').classList.toggle('hidden', currentView !== 'list');
   });
 });
 
@@ -395,48 +517,291 @@ document.querySelectorAll('.view-btn').forEach(btn => {
   document.getElementById(id).addEventListener(id === 'searchBox' ? 'input' : 'change', renderAll);
 });
 
-// Modal
-let currentGroupId = null;
-function openModal(gid) {
-  currentGroupId = gid;
-  const g = groups.find(x => x.id === gid);
-  document.getElementById('modalTitle').textContent = `${LANG_EMOJI[g.lang]} ${g.lang} — ${CAT_EMOJI[g.cat]} ${g.cat} — ${g.tier}`;
-  document.getElementById('modalMeta').textContent = `组 #${String(g.id).padStart(3, '0')} · ${getDoneCount(g)}/${CASES_PER_GROUP} 已完成`;
-  const casesHtml = g.cases.map((c, i) => `
-    <div class="case-item">
-      <input type="checkbox" class="case-checkbox" data-idx="${i}" ${c.done ? 'checked' : ''}>
-      <span class="case-label">${c.id} — ${g.lang}·${g.cat}·${g.tier} 样本 ${i + 1}</span>
-      <span class="case-status ${c.done ? 'completed' : 'pending'}">${c.done ? '已完成' : '待标注'}</span>
-    </div>`).join('');
-  document.getElementById('modalCases').innerHTML = casesHtml;
-  document.getElementById('modalOverlay').classList.add('show');
+// ============== CSV IMPORT ==============
+document.getElementById('csvFileInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = function(ev) {
+    try {
+      const lines = ev.target.result.split('\n').filter(l => l.trim());
+      if (lines.length < 2) { alert('CSV 文件为空或格式不对'); return; }
+      const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+      const rows = lines.slice(1).map(l => {
+        const vals = l.split(',').map(v => v.trim());
+        const obj = {};
+        headers.forEach((h, i) => obj[h] = vals[i] || '');
+        return obj;
+      });
+      // Group by language + category + tier
+      const newGroups = {};
+      rows.forEach(r => {
+        const lang = r.language || '英语';
+        const cat = r.category || '其他';
+        const tier = r.tier || '中部';
+        const key = `${lang}|${cat}|${tier}`;
+        if (!newGroups[key]) newGroups[key] = { lang, cat, tier, cases: [] };
+        newGroups[key].cases.push({
+          user_id: r.user_id || '',
+          username: r.username || r.user_id || '',
+          followers: parseInt(r.followers) || 0,
+          monthly_income: parseFloat(r.monthly_income) || 0,
+          monthly_posts: parseInt(r.monthly_posts) || 0,
+          pgc_score: r.pgc_score || '',
+          production_score: parseInt(r.production_score) || 0,
+          content_score: parseInt(r.content_score) || 0,
+          vids: [r.vid_1, r.vid_2, r.vid_3, r.vid_4, r.vid_5].filter(Boolean),
+          annotation: null
+        });
+      });
+      groups = Object.values(newGroups).map((g, i) => ({ id: i + 1, ...g }));
+      save();
+      populateFilters();
+      renderAll();
+      alert(`导入成功！共 ${groups.length} 组，${rows.length} 个作者`);
+    } catch(err) {
+      alert('CSV 解析失败: ' + err.message);
+    }
+  };
+  reader.readAsText(file);
+  e.target.value = '';
+});
 
-  document.querySelectorAll('.case-checkbox').forEach(cb => {
-    cb.addEventListener('change', (e) => {
-      const idx = parseInt(e.target.dataset.idx);
-      g.cases[idx].done = e.target.checked;
-      save(); openModal(gid); renderAll();
+// ============== EXPORT ==============
+function exportResults() {
+  const header = 'user_id,username,language,category,tier,followers,monthly_income,monthly_posts,pgc_score_original,prod_score_original,content_score_original,annotated_pgc_type,annotated_prod_score,annotated_content_score,annotated_style';
+  const rows = [];
+  groups.forEach(g => {
+    g.cases.forEach(c => {
+      const a = c.annotation || {};
+      rows.push([
+        c.user_id, c.username, g.lang, g.cat, g.tier,
+        c.followers, c.monthly_income, c.monthly_posts,
+        c.pgc_score, c.production_score, c.content_score,
+        a.pgc_type || '', a.prod_score || '', a.content_score || '', a.style || ''
+      ].join(','));
     });
+  });
+  const csv = header + '\n' + rows.join('\n');
+  const blob = new Blob(['\uFEFF' + csv], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `casereview_results_${new Date().toISOString().slice(0,10)}.csv`;
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+// ============== DETAIL PAGE ==============
+function openGroup(gid, caseIdx) {
+  currentGroupId = gid;
+  currentCaseIdx = caseIdx || 0;
+  renderDetail();
+  document.getElementById('detailOverlay').classList.add('show');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeDetail() {
+  document.getElementById('detailOverlay').classList.remove('show');
+  document.body.style.overflow = '';
+  renderAll();
+}
+
+function navCase(dir) {
+  const g = groups.find(x => x.id === currentGroupId);
+  const newIdx = currentCaseIdx + dir;
+  if (newIdx < 0 || newIdx >= g.cases.length) return;
+  currentCaseIdx = newIdx;
+  renderDetail();
+}
+
+function renderDetail() {
+  const g = groups.find(x => x.id === currentGroupId);
+  const c = g.cases[currentCaseIdx];
+
+  // Context bar
+  const tierName = { '头部': '头部', '中部': '中部', '尾部': '尾部' };
+  const catName = g.cat;
+  const langName = g.lang;
+  document.getElementById('detailContext').innerHTML =
+    `正在标注 <strong>${LANG_EMOJI[langName]} ${langName}</strong> 的 <strong>${CAT_EMOJI[catName]} ${catName}</strong> 类 <strong>${tierName[g.tier]}作者</strong> &nbsp;·&nbsp; 第 ${currentCaseIdx + 1} / ${g.cases.length} 位`;
+
+  // Nav buttons
+  document.getElementById('prevCaseBtn').disabled = currentCaseIdx === 0;
+  document.getElementById('nextCaseBtn').disabled = currentCaseIdx === g.cases.length - 1;
+
+  // Author card
+  const initial = (c.username || c.user_id || '?')[0].toUpperCase();
+  const pgcClass = c.pgc_score === 'PGC80' ? 'pgc80' : c.pgc_score === 'PGC60' ? 'pgc60' : 'nonpgc';
+  document.getElementById('authorCard').innerHTML = `
+    <div class="author-header">
+      <div class="author-avatar">${initial}</div>
+      <div>
+        <div class="author-name">${c.username || 'Unknown'}</div>
+        <div class="author-uid">UID: ${c.user_id}</div>
+      </div>
+      <div style="margin-left:auto">
+        <span class="tag tag-lang">${g.lang}</span>
+        <span class="tag tag-cat">${g.cat}</span>
+        <span class="tag ${TIER_CLASS[g.tier]}">${g.tier}</span>
+      </div>
+    </div>
+    <div class="author-metrics">
+      <div class="metric-item"><div class="metric-label">粉丝</div><div class="metric-value">${formatNum(c.followers)}</div></div>
+      <div class="metric-item"><div class="metric-label">月收入 ($)</div><div class="metric-value">${formatNum(c.monthly_income)}</div></div>
+      <div class="metric-item"><div class="metric-label">月投稿数</div><div class="metric-value">${c.monthly_posts}</div></div>
+      <div class="metric-item"><div class="metric-label">PGC 分</div><div class="metric-value ${pgcClass}">${c.pgc_score}</div></div>
+      <div class="metric-item"><div class="metric-label">Production Score</div><div class="metric-value">${c.production_score}</div></div>
+      <div class="metric-item"><div class="metric-label">Content Score</div><div class="metric-value">${c.content_score}</div></div>
+    </div>`;
+
+  // Videos
+  const vids = c.vids || [];
+  let activeVid = 0;
+  const videoHtml = `
+    <h3>作者近期视频 (${vids.length})</h3>
+    ${vids.length ? `
+      <div class="video-tabs" id="videoTabs">
+        ${vids.map((v, i) => `<button class="video-tab ${i === 0 ? 'active' : ''}" data-idx="${i}" onclick="switchVideo(${i})">视频 ${i + 1}</button>`).join('')}
+      </div>
+      <div class="video-container" id="videoContainer">
+        <iframe id="videoFrame" src="https://www.tiktok.com/embed/v2/${vids[0]}" width="340" height="600" allowfullscreen></iframe>
+      </div>
+    ` : `
+      <div class="video-placeholder">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="4"/><polygon points="10 8 16 12 10 16"/></svg>
+        <span>暂无视频数据</span>
+      </div>
+    `}`;
+  document.getElementById('videoSection').innerHTML = videoHtml;
+
+  // Annotation
+  const a = c.annotation || {};
+  document.getElementById('annotationSection').innerHTML = `
+    <h3>标注</h3>
+    <div class="annotation-grid">
+      <div class="annotation-field">
+        <div class="annotation-label">PGC Type</div>
+        <div class="annotation-options" id="annoPgc">
+          ${PGC_TYPES.map(t => `<button class="anno-btn ${a.pgc_type === t ? 'selected' : ''}" data-field="pgc_type" data-val="${t}" onclick="setAnno(this)">${t}</button>`).join('')}
+        </div>
+      </div>
+      <div class="annotation-field">
+        <div class="annotation-label">Production Score</div>
+        <div class="annotation-options" id="annoProd">
+          ${PROD_SCORES.map(t => `<button class="anno-btn ${a.prod_score === t ? 'selected' : ''}" data-field="prod_score" data-val="${t}" onclick="setAnno(this)">${t}</button>`).join('')}
+        </div>
+      </div>
+      <div class="annotation-field">
+        <div class="annotation-label">Content Score</div>
+        <div class="annotation-options" id="annoContent">
+          ${CONTENT_SCORES.map(t => `<button class="anno-btn ${a.content_score === t ? 'selected' : ''}" data-field="content_score" data-val="${t}" onclick="setAnno(this)">${t}</button>`).join('')}
+        </div>
+      </div>
+      <div class="annotation-field">
+        <div class="annotation-label">画风类别</div>
+        <select class="anno-select" id="annoStyle" onchange="setAnnoSelect(this)">
+          <option value="">请选择...</option>
+          ${STYLE_OPTIONS.map(t => `<option value="${t}" ${a.style === t ? 'selected' : ''}>${t}</option>`).join('')}
+        </select>
+      </div>
+    </div>
+    <div class="annotation-actions">
+      <span class="save-hint" id="saveHint">已自动保存 ✓</span>
+      <button class="btn btn-danger" onclick="resetAnnotation()">清除标注</button>
+      <button class="btn btn-skip" onclick="skipCase()">跳过</button>
+      <button class="btn btn-primary" onclick="saveAndNext()">保存并下一个 &rarr;</button>
+    </div>`;
+}
+
+function switchVideo(idx) {
+  const g = groups.find(x => x.id === currentGroupId);
+  const c = g.cases[currentCaseIdx];
+  const vids = c.vids || [];
+  if (!vids[idx]) return;
+  document.getElementById('videoFrame').src = `https://www.tiktok.com/embed/v2/${vids[idx]}`;
+  document.querySelectorAll('.video-tab').forEach((t, i) => {
+    t.classList.toggle('active', i === idx);
   });
 }
 
-document.getElementById('modalClose').addEventListener('click', () => {
-  document.getElementById('modalOverlay').classList.remove('show');
-});
-document.getElementById('modalOverlay').addEventListener('click', (e) => {
-  if (e.target === e.currentTarget) document.getElementById('modalOverlay').classList.remove('show');
-});
-document.getElementById('modalDoneAll').addEventListener('click', () => {
+function setAnno(btn) {
   const g = groups.find(x => x.id === currentGroupId);
-  g.cases.forEach(c => c.done = true);
-  save(); openModal(currentGroupId); renderAll();
-});
-document.getElementById('modalReset').addEventListener('click', () => {
-  const g = groups.find(x => x.id === currentGroupId);
-  g.cases.forEach(c => c.done = false);
-  save(); openModal(currentGroupId); renderAll();
-});
+  const c = g.cases[currentCaseIdx];
+  if (!c.annotation) c.annotation = {};
+  const field = btn.dataset.field;
+  const val = btn.dataset.val;
+  // Toggle: click again to deselect
+  if (c.annotation[field] === val) {
+    delete c.annotation[field];
+  } else {
+    c.annotation[field] = val;
+  }
+  // Clean up empty annotation
+  if (Object.keys(c.annotation).length === 0) c.annotation = null;
+  save();
+  // Update buttons in this group
+  btn.parentElement.querySelectorAll('.anno-btn').forEach(b => {
+    b.classList.toggle('selected', c.annotation && c.annotation[b.dataset.field] === b.dataset.val);
+  });
+  flashSave();
+}
 
+function setAnnoSelect(sel) {
+  const g = groups.find(x => x.id === currentGroupId);
+  const c = g.cases[currentCaseIdx];
+  if (!c.annotation) c.annotation = {};
+  if (sel.value) {
+    c.annotation.style = sel.value;
+  } else {
+    delete c.annotation.style;
+  }
+  if (Object.keys(c.annotation).length === 0) c.annotation = null;
+  save();
+  flashSave();
+}
+
+function flashSave() {
+  const hint = document.getElementById('saveHint');
+  hint.classList.add('show');
+  clearTimeout(hint._timer);
+  hint._timer = setTimeout(() => hint.classList.remove('show'), 1500);
+}
+
+function resetAnnotation() {
+  const g = groups.find(x => x.id === currentGroupId);
+  g.cases[currentCaseIdx].annotation = null;
+  save();
+  renderDetail();
+}
+
+function skipCase() {
+  const g = groups.find(x => x.id === currentGroupId);
+  if (currentCaseIdx < g.cases.length - 1) {
+    currentCaseIdx++;
+    renderDetail();
+    document.getElementById('detailOverlay').scrollTop = 0;
+  } else {
+    closeDetail();
+  }
+}
+
+function saveAndNext() {
+  const g = groups.find(x => x.id === currentGroupId);
+  const c = g.cases[currentCaseIdx];
+  // Ensure annotation exists (even if partial)
+  if (!c.annotation) c.annotation = {};
+  save();
+  if (currentCaseIdx < g.cases.length - 1) {
+    currentCaseIdx++;
+    renderDetail();
+    document.getElementById('detailOverlay').scrollTop = 0;
+  } else {
+    closeDetail();
+  }
+}
+
+// ============== INIT ==============
 renderAll();
 </script>
 </body>

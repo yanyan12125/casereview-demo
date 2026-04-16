@@ -3,174 +3,180 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>CaseReview - 标注任务</title>
+<title>CRP Creator Gallery</title>
 <style>
+  @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap');
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: #f0f2f5; color: #1a1a2e; min-height: 100vh; }
+  body { font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; background: #f6f6f9; color: #111; min-height: 100vh; -webkit-font-smoothing: antialiased; }
 
-  /* Header */
-  .header { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 28px 40px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
-  .header-left h1 { font-size: 26px; font-weight: 700; }
-  .header-left p { margin-top: 4px; opacity: 0.85; font-size: 14px; }
-  .header-actions { display: flex; gap: 10px; align-items: center; }
-  .header-btn { padding: 9px 18px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.4); background: rgba(255,255,255,0.12); color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .15s; display: flex; align-items: center; gap: 6px; }
-  .header-btn:hover { background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.7); }
-  .header-btn svg { width: 16px; height: 16px; }
-  .header-btn-solid { background: #fff; color: #667eea; border-color: #fff; }
-  .header-btn-solid:hover { background: #f0f0ff; }
+  /* =================== HEADER =================== */
+  .header { background: #0d0d1a; color: #fff; padding: 28px 48px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 16px; }
+  .header-left h1 { font-size: 28px; font-weight: 900; letter-spacing: -1px; }
+  .header-left h1 em { font-style: normal; color: #fff; }
+  .header-left p { margin-top: 6px; opacity: 0.45; font-size: 13px; font-weight: 500; letter-spacing: 0.5px; }
+  .header-actions { display: flex; gap: 8px; align-items: center; }
+  .header-btn { padding: 9px 18px; border-radius: 8px; border: 1.5px solid rgba(255,255,255,0.2); background: transparent; color: #fff; font-size: 13px; font-weight: 600; cursor: pointer; transition: all .2s; display: flex; align-items: center; gap: 6px; }
+  .header-btn:hover { background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.4); }
+  .header-btn svg { width: 15px; height: 15px; }
+  .header-btn-solid { background: #fff; color: #0d0d1a; border-color: #fff; }
+  .header-btn-solid:hover { background: #e8e8e8; border-color: #e8e8e8; }
   #csvFileInput { display: none; }
 
-  /* Stats */
-  .stats-bar { display: flex; gap: 24px; padding: 18px 40px; background: #fff; border-bottom: 1px solid #e8e8e8; flex-wrap: wrap; }
+  /* =================== STATS BAR =================== */
+  .stats-bar { display: flex; gap: 48px; padding: 20px 48px; background: #fff; border-bottom: 1px solid #ebebeb; flex-wrap: wrap; }
   .stat { display: flex; flex-direction: column; }
-  .stat-value { font-size: 22px; font-weight: 700; color: #667eea; }
-  .stat-label { font-size: 12px; color: #888; margin-top: 2px; }
+  .stat-value { font-size: 2.25rem; font-weight: 900; color: #0d0d1a; font-variant-numeric: tabular-nums; letter-spacing: -1px; line-height: 1; }
+  .stat-label { font-size: 11px; color: #999; margin-top: 6px; text-transform: uppercase; letter-spacing: 1px; font-weight: 600; }
 
-  /* Controls */
-  .controls { padding: 16px 40px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+  /* =================== CONTROLS =================== */
+  .controls { padding: 14px 48px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; background: #fff; border-bottom: 1px solid #ebebeb; }
   .filter-group { display: flex; align-items: center; gap: 6px; }
-  .filter-group label { font-size: 13px; font-weight: 600; color: #555; white-space: nowrap; }
-  select { padding: 7px 12px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 13px; background: #fff; cursor: pointer; outline: none; }
-  select:focus { border-color: #667eea; box-shadow: 0 0 0 2px rgba(102,126,234,0.15); }
-  .search-box { padding: 7px 14px; border: 1px solid #d9d9d9; border-radius: 8px; font-size: 13px; width: 180px; outline: none; }
-  .search-box:focus { border-color: #667eea; box-shadow: 0 0 0 2px rgba(102,126,234,0.15); }
+  .filter-group label { font-size: 12px; font-weight: 700; color: #999; white-space: nowrap; text-transform: uppercase; letter-spacing: 0.5px; }
+  select { padding: 8px 14px; border: 1.5px solid #e0e0e0; border-radius: 8px; font-size: 14px; background: #fff; cursor: pointer; outline: none; color: #111; font-weight: 500; font-family: inherit; }
+  select:focus { border-color: #0d0d1a; }
+  .search-box { padding: 8px 14px; border: 1.5px solid #e0e0e0; border-radius: 8px; font-size: 14px; width: 200px; outline: none; color: #111; font-weight: 500; font-family: inherit; }
+  .search-box:focus { border-color: #0d0d1a; }
 
-  .view-toggle { margin-left: auto; display: flex; gap: 4px; background: #f0f0f0; border-radius: 8px; padding: 3px; }
-  .view-btn { padding: 6px 16px; border: none; background: transparent; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 500; color: #666; transition: all .2s; }
-  .view-btn.active { background: #fff; color: #667eea; box-shadow: 0 1px 3px rgba(0,0,0,0.1); }
+  .view-toggle { margin-left: auto; display: flex; gap: 0; background: #f0f0f3; border-radius: 8px; padding: 3px; }
+  .view-btn { padding: 7px 20px; border: none; background: transparent; border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: 600; color: #999; transition: all .2s; font-family: inherit; }
+  .view-btn.active { background: #0d0d1a; color: #fff; }
 
-  .container { padding: 20px 40px 40px; }
+  .container { padding: 28px 48px 48px; }
 
-  /* Tags */
-  .tag { display: inline-flex; align-items: center; padding: 3px 10px; border-radius: 20px; font-size: 12px; font-weight: 600; }
-  .tag-lang { background: #eef2ff; color: #4f46e5; }
-  .tag-cat { background: #fef3c7; color: #b45309; }
-  .tag-tier-head { background: #dcfce7; color: #15803d; }
-  .tag-tier-mid { background: #e0f2fe; color: #0369a1; }
-  .tag-tier-tail { background: #fce7f3; color: #be185d; }
+  /* =================== TAGS =================== */
+  .tag { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.3px; }
+  .tag-lang { background: #e8ecff; color: #3344aa; }
+  .tag-cat { background: #fff3d0; color: #886600; }
+  .tag-tier-head { background: #d4f5e0; color: #0a6b2e; }
+  .tag-tier-mid { background: #d8effc; color: #0a5a8a; }
+  .tag-tier-tail { background: #fce0ec; color: #a01050; }
 
-  /* Matrix View — block style */
-  .lang-blocks { display: flex; flex-direction: column; gap: 24px; }
-  .lang-block { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); }
-  .lang-block-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+  /* =================== MATRIX VIEW =================== */
+  .lang-blocks { display: flex; flex-direction: column; gap: 20px; }
+  .lang-block { background: #fff; border-radius: 12px; padding: 24px 28px; box-shadow: 0 1px 3px rgba(0,0,0,0.04); border: 1px solid #ebebeb; }
+  .lang-block-header { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; padding-bottom: 14px; border-bottom: 1px solid #f0f0f0; }
   .lang-block-header .lang-emoji { font-size: 28px; }
-  .lang-block-header .lang-name { font-size: 18px; font-weight: 700; color: #1a1a2e; }
-  .lang-block-header .lang-progress { margin-left: auto; font-size: 13px; color: #888; font-weight: 500; }
+  .lang-block-header .lang-name { font-size: 20px; font-weight: 800; color: #0d0d1a; letter-spacing: -0.3px; }
+  .lang-block-header .lang-progress { margin-left: auto; font-size: 13px; color: #999; font-weight: 600; }
   .block-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
-  .block-col-header { text-align: center; font-size: 12px; font-weight: 600; color: #999; padding-bottom: 4px; }
-  .block-cell { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 8px; border-radius: 12px; cursor: pointer; transition: all .2s; text-align: center; min-height: 72px; border: 2px solid transparent; }
-  .block-cell:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); border-color: #667eea; }
-  .block-cell.todo { background: #f8f9fa; }
-  .block-cell.partial { background: #fffbeb; border-color: #fcd34d; }
-  .block-cell.done { background: #f0fdf4; border-color: #86efac; }
-  .block-cell .block-tier { font-size: 11px; font-weight: 600; margin-bottom: 4px; }
-  .block-cell .block-count { font-size: 16px; font-weight: 700; }
-  .block-cell.todo .block-count { color: #c4c4c4; }
-  .block-cell.partial .block-count { color: #d97706; }
-  .block-cell.done .block-count { color: #16a34a; }
-  .block-cell .block-check { font-size: 18px; color: #22c55e; }
+  .block-col-header { text-align: center; font-size: 12px; font-weight: 700; color: #bbb; padding-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .block-cell { display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 14px 8px; border-radius: 10px; cursor: pointer; transition: all .2s; text-align: center; min-height: 72px; border: 2px solid #f0f0f0; background: #fafafa; }
+  .block-cell:hover { border-color: #0d0d1a; transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.08); }
+  .block-cell.todo { background: #fafafa; border-color: #f0f0f0; }
+  .block-cell.partial { background: #fffde6; border-color: #f0d060; }
+  .block-cell.done { background: #edfaf2; border-color: #4dc87a; }
+  .block-cell .block-tier { font-size: 11px; font-weight: 700; margin-bottom: 6px; }
+  .block-cell .block-count { font-size: 1.375rem; font-weight: 900; font-variant-numeric: tabular-nums; letter-spacing: -0.5px; }
+  .block-cell.todo .block-count { color: #ccc; }
+  .block-cell.partial .block-count { color: #c09000; }
+  .block-cell.done .block-count { color: #1a9a48; }
+  .block-cell .block-check { font-size: 20px; color: #1a9a48; }
 
-  /* List View — grouped by category, 30 per card (head+mid+tail) */
-  .list-groups { display: flex; flex-direction: column; gap: 20px; }
-  .list-group-card { background: #fff; border-radius: 14px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); overflow: hidden; }
-  .list-group-header { padding: 16px 24px; background: #fafafa; border-bottom: 1px solid #eee; display: flex; align-items: center; gap: 12px; }
-  .list-group-title { font-size: 16px; font-weight: 700; color: #1a1a2e; }
-  .list-group-count { margin-left: auto; font-size: 13px; color: #888; }
+  /* =================== LIST VIEW =================== */
+  .list-groups { display: flex; flex-direction: column; gap: 16px; }
+  .list-group-card { background: #fff; border-radius: 12px; border: 1px solid #ebebeb; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .list-group-header { padding: 16px 28px; background: #fafafa; border-bottom: 1px solid #ebebeb; display: flex; align-items: center; gap: 12px; }
+  .list-group-title { font-size: 17px; font-weight: 800; color: #0d0d1a; }
+  .list-group-count { margin-left: auto; font-size: 13px; color: #999; font-weight: 600; }
   .list-tier-section { padding: 4px 0; }
-  .list-tier-label { padding: 8px 24px 4px; font-size: 12px; font-weight: 600; color: #999; text-transform: uppercase; letter-spacing: 0.5px; }
-  .list-row { display: flex; align-items: center; padding: 10px 24px; gap: 16px; cursor: pointer; transition: background .12s; border-bottom: 1px solid #f5f5f5; }
+  .list-tier-label { padding: 10px 28px 4px; }
+  .list-row { display: flex; align-items: center; padding: 12px 28px; gap: 16px; cursor: pointer; transition: background .15s; border-bottom: 1px solid #f5f5f5; }
   .list-row:last-child { border-bottom: none; }
-  .list-row:hover { background: #f8f7ff; }
-  .list-row-id { font-size: 13px; color: #aaa; font-weight: 500; min-width: 80px; }
-  .list-row-name { flex: 1; font-size: 14px; font-weight: 500; }
-  .list-row-meta { font-size: 12px; color: #999; min-width: 100px; text-align: right; }
-  .list-row-status { width: 8px; height: 8px; border-radius: 50; }
-  .status-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
-  .status-done { background: #22c55e; }
-  .status-partial { background: #f59e0b; }
-  .status-todo { background: #d1d5db; }
+  .list-row:hover { background: #f8f8fb; }
+  .list-row-name { flex: 1; font-size: 15px; font-weight: 600; color: #111; }
+  .list-row-meta { font-size: 15px; color: #555; min-width: 120px; text-align: right; font-weight: 700; font-variant-numeric: tabular-nums; }
+  .status-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+  .status-done { background: #1a9a48; }
+  .status-partial { background: #e0a020; }
+  .status-todo { background: #ddd; }
 
-  /* ====== DETAIL PAGE (replaces modal) ====== */
-  .detail-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; z-index: 1000; overflow-y: auto; }
-  .detail-overlay.show { display: block; }
-  .detail-page { background: #f0f2f5; min-height: 100vh; max-width: 1200px; margin: 0 auto; }
+  /* =================== DETAIL OVERLAY =================== */
+  .detail-overlay { position: fixed; inset: 0; background: rgba(13,13,26,0.5); backdrop-filter: blur(2px); display: none; z-index: 1000; overflow-y: auto; }
+  .detail-overlay.show { display: flex; align-items: flex-start; justify-content: center; padding: 32px 0; }
+  .detail-page { background: #f6f6f9; width: 94%; max-width: 1440px; border-radius: 16px; box-shadow: 0 24px 64px rgba(0,0,0,0.25); overflow: hidden; max-height: calc(100vh - 64px); display: flex; flex-direction: column; }
 
-  .detail-topbar { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: #fff; padding: 20px 32px; display: flex; align-items: center; gap: 16px; }
-  .detail-back { background: rgba(255,255,255,0.15); border: none; color: #fff; width: 36px; height: 36px; border-radius: 8px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s; flex-shrink: 0; }
-  .detail-back:hover { background: rgba(255,255,255,0.3); }
-  .detail-context { font-size: 16px; font-weight: 500; }
-  .detail-nav { margin-left: auto; display: flex; gap: 8px; }
-  .detail-nav-btn { background: rgba(255,255,255,0.15); border: none; color: #fff; padding: 8px 14px; border-radius: 8px; font-size: 13px; font-weight: 500; cursor: pointer; transition: background .15s; }
-  .detail-nav-btn:hover { background: rgba(255,255,255,0.3); }
-  .detail-nav-btn:disabled { opacity: 0.4; cursor: default; }
+  .detail-topbar { background: #0d0d1a; color: #fff; padding: 16px 28px; display: flex; align-items: center; gap: 16px; flex-shrink: 0; }
+  .detail-back { background: rgba(255,255,255,0.08); border: none; color: #fff; width: 36px; height: 36px; border-radius: 8px; font-size: 18px; cursor: pointer; display: flex; align-items: center; justify-content: center; transition: background .15s; flex-shrink: 0; }
+  .detail-back:hover { background: rgba(255,255,255,0.18); }
+  .detail-context { font-size: 15px; font-weight: 700; letter-spacing: -0.2px; }
+  .detail-progress { margin-left: auto; font-size: 15px; font-weight: 800; opacity: 0.7; font-variant-numeric: tabular-nums; }
 
-  .detail-body { padding: 24px 32px; }
+  .detail-body { padding: 20px 24px; overflow-y: auto; flex: 1; }
 
-  /* Author info card */
-  .author-card { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 20px; }
-  .author-header { display: flex; align-items: center; gap: 16px; margin-bottom: 16px; }
-  .author-avatar { width: 52px; height: 52px; border-radius: 50%; background: linear-gradient(135deg, #667eea, #764ba2); display: flex; align-items: center; justify-content: center; color: #fff; font-size: 20px; font-weight: 700; flex-shrink: 0; }
-  .author-name { font-size: 18px; font-weight: 700; }
-  .author-uid { font-size: 13px; color: #999; margin-top: 2px; }
-  .author-metrics { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 12px; }
-  .metric-item { background: #f8f9fa; border-radius: 10px; padding: 12px 16px; }
-  .metric-label { font-size: 11px; color: #888; font-weight: 500; text-transform: uppercase; letter-spacing: 0.3px; }
-  .metric-value { font-size: 18px; font-weight: 700; color: #1a1a2e; margin-top: 4px; }
-  .metric-value.pgc80 { color: #16a34a; }
-  .metric-value.pgc60 { color: #d97706; }
-  .metric-value.nonpgc { color: #dc2626; }
+  /* =================== AUTHOR ROW =================== */
+  .author-row { background: #fff; border-radius: 12px; margin-bottom: 14px; border: 2px solid #ebebeb; display: flex; transition: all .2s; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.04); }
+  .author-row:hover { border-color: #ddd; }
+  .author-row.done { border-color: #4dc87a; background: #fcfefb; }
 
-  /* Video section */
-  .video-section { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 20px; }
-  .video-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 16px; }
-  .video-tabs { display: flex; gap: 8px; margin-bottom: 16px; flex-wrap: wrap; }
-  .video-tab { padding: 8px 16px; border: 1.5px solid #e5e7eb; border-radius: 8px; background: #fff; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; color: #555; }
-  .video-tab.active { border-color: #667eea; background: #eef2ff; color: #667eea; font-weight: 600; }
-  .video-tab:hover { border-color: #667eea; }
-  .video-container { display: flex; justify-content: center; min-height: 200px; }
-  .video-container iframe { border: none; border-radius: 12px; }
-  .video-placeholder { display: flex; flex-direction: column; align-items: center; justify-content: center; color: #ccc; gap: 8px; padding: 40px; }
-  .video-placeholder svg { width: 48px; height: 48px; }
+  /* Left: author info */
+  .row-info { width: 160px; flex-shrink: 0; padding: 14px; border-right: 1px solid #f0f0f0; display: flex; flex-direction: column; gap: 4px; background: #fafafa; overflow: hidden; justify-content: center; }
+  .row-top { display: flex; align-items: center; gap: 8px; }
+  .row-avatar { width: 36px; height: 36px; border-radius: 10px; background: #0d0d1a; color: #fff; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; flex-shrink: 0; }
+  .row-num { font-size: 11px; font-weight: 700; color: #bbb; }
+  .author-row.done .row-num { color: #1a9a48; }
+  .row-author-name { font-size: 13px; font-weight: 700; color: #0d0d1a; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .row-meta { font-size: 14px; color: #0d0d1a; line-height: 1.7; margin-top: 4px; font-weight: 600; }
+  .row-meta span { color: #999; font-size: 11px; font-weight: 500; }
 
-  /* Annotation section */
-  .annotation-section { background: #fff; border-radius: 14px; padding: 24px; box-shadow: 0 1px 4px rgba(0,0,0,0.07); margin-bottom: 20px; }
-  .annotation-section h3 { font-size: 16px; font-weight: 700; margin-bottom: 20px; }
-  .annotation-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 20px; }
-  .annotation-field { }
-  .annotation-label { font-size: 13px; font-weight: 600; color: #555; margin-bottom: 8px; }
-  .annotation-options { display: flex; gap: 8px; flex-wrap: wrap; }
-  .anno-btn { padding: 8px 16px; border: 1.5px solid #e5e7eb; border-radius: 8px; background: #fff; font-size: 13px; font-weight: 500; cursor: pointer; transition: all .15s; color: #555; }
-  .anno-btn:hover { border-color: #667eea; background: #f8f7ff; }
-  .anno-btn.selected { border-color: #667eea; background: #667eea; color: #fff; }
-  .anno-select { padding: 9px 14px; border: 1.5px solid #e5e7eb; border-radius: 8px; font-size: 13px; background: #fff; cursor: pointer; outline: none; min-width: 200px; }
-  .anno-select:focus { border-color: #667eea; box-shadow: 0 0 0 2px rgba(102,126,234,0.15); }
+  /* Center: 5 video columns */
+  .row-videos { flex: 1; display: flex; min-width: 0; overflow: hidden; }
 
-  .annotation-actions { display: flex; gap: 12px; margin-top: 24px; justify-content: flex-end; align-items: center; }
-  .save-hint { font-size: 13px; color: #22c55e; font-weight: 500; display: none; }
-  .save-hint.show { display: block; }
-  .btn { padding: 10px 24px; border-radius: 8px; border: none; font-size: 14px; font-weight: 600; cursor: pointer; transition: all .15s; }
-  .btn-primary { background: #667eea; color: #fff; }
-  .btn-primary:hover { background: #5a6fd6; }
-  .btn-secondary { background: #f0f0f0; color: #555; }
-  .btn-secondary:hover { background: #e5e5e5; }
-  .btn-danger { background: #fee2e2; color: #dc2626; }
-  .btn-danger:hover { background: #fecaca; }
-  .btn-skip { background: #fef3c7; color: #92400e; }
-  .btn-skip:hover { background: #fde68a; }
+  /* Right: annotation panel */
+  .row-anno-panel { width: 210px; flex-shrink: 0; padding: 14px; background: #f8f8fb; border-left: 4px solid #0d0d1a; display: flex; flex-direction: column; gap: 8px; justify-content: center; }
+  .row-pgc-badge { font-size: 14px; font-weight: 800; padding: 8px 0; border-radius: 8px; text-align: center; letter-spacing: 0.3px; }
+  .row-pgc-badge.pgc80 { background: #d4f5e0; color: #0a6b2e; }
+  .row-pgc-badge.pgc60 { background: #fff3d0; color: #b08000; }
+  .row-pgc-badge.nonpgc { background: #fde0e0; color: #cc0000; }
+  .row-style-select { padding: 8px 10px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; background: #fff; cursor: pointer; outline: none; width: 100%; color: #111; }
+  .row-style-select:focus { border-color: #333; }
+
+  .vid-col { flex: 1; min-width: 0; border-right: 1px solid #eee; display: flex; flex-direction: column; }
+  .vid-col:last-child { border-right: none; }
+
+  /* Video embed */
+  .vid-embed { background: #000; height: 340px; }
+  .vid-embed iframe { border: none; width: 100%; height: 100%; display: block; }
+  .no-video { display: flex; align-items: center; justify-content: center; height: 100%; color: #666; font-size: 13px; background: #f0f0f0; min-height: 120px; }
+  .vid-id { font-size: 9px; color: #aaa; padding: 3px 8px; text-align: center; background: #f5f5f5; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; border-top: 1px solid #eee; }
+
+  /* Model scores */
+  .vid-model { padding: 8px 12px; background: #f6f6f9; border-top: 1px solid #ebebeb; }
+  .vid-model-row { display: flex; justify-content: space-between; align-items: center; font-size: 13px; padding: 3px 0; }
+  .vid-model-label { color: #999; font-weight: 600; }
+  .vid-model-val { font-weight: 800; font-size: 15px; font-variant-numeric: tabular-nums; }
+  .vid-model-val.score-0 { color: #cc0000; }
+  .vid-model-val.score-1 { color: #cc8800; }
+  .vid-model-val.score-2 { color: #008830; }
+  .vid-model-val.pgc80 { color: #008830; }
+  .vid-model-val.pgc60 { color: #cc8800; }
+  .vid-model-val.nonpgc { color: #cc0000; }
+
+  /* Annotation controls */
+  .row-anno-section { margin-top: 8px; padding-top: 8px; border-top: 1px solid #ddd; }
+  .row-anno-title { font-size: 11px; font-weight: 700; color: #999; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
+  .row-anno-row { display: flex; align-items: center; gap: 6px; margin-bottom: 8px; }
+  .row-anno-label { font-size: 13px; font-weight: 600; color: #666; width: 48px; flex-shrink: 0; }
+  .annotation-options { display: flex; gap: 4px; flex: 1; }
+  .anno-btn { flex: 1; padding: 8px 0; border: 2px solid #e0e0e0; border-radius: 8px; background: #fff; font-size: 17px; font-weight: 800; cursor: pointer; transition: all .15s; color: #333; text-align: center; }
+  .anno-btn:hover { border-color: #999; background: #f5f5f5; }
+  .anno-btn.selected { background: #0d0d1a; color: #fff; border-color: #0d0d1a; box-shadow: 0 2px 8px rgba(13,13,26,0.2); }
+  .pgc-auto { font-size: 14px; font-weight: 700; padding: 6px 0; border-radius: 6px; text-align: center; display: block; }
+  .pgc-auto.pgc80 { background: #d4f5e0; color: #0a6b2e; }
+  .pgc-auto.pgc60 { background: #fff3d0; color: #b08000; }
+  .pgc-auto.nonpgc { background: #fde0e0; color: #cc0000; }
+  .pgc-auto.pending { background: #f0f0f0; color: #aaa; }
 
   .hidden { display: none !important; }
 
-  /* Empty state */
-  .empty-state { text-align: center; padding: 80px 40px; color: #aaa; }
-  .empty-state svg { width: 64px; height: 64px; margin-bottom: 16px; }
-  .empty-state h3 { font-size: 18px; color: #666; margin-bottom: 8px; }
-  .empty-state p { font-size: 14px; }
+  /* =================== SCROLLBAR =================== */
+  .detail-body::-webkit-scrollbar { width: 6px; }
+  .detail-body::-webkit-scrollbar-track { background: transparent; }
+  .detail-body::-webkit-scrollbar-thumb { background: #ccc; border-radius: 3px; }
+  .detail-body::-webkit-scrollbar-thumb:hover { background: #999; }
 
   @media (max-width: 768px) {
     .header, .stats-bar, .controls, .container { padding-left: 16px; padding-right: 16px; }
-    .detail-body { padding: 16px; }
-    .author-metrics { grid-template-columns: repeat(2, 1fr); }
-    .annotation-grid { grid-template-columns: 1fr; }
+    .detail-body { padding: 12px; }
   }
 </style>
 </head>
@@ -179,19 +185,19 @@
 <div id="mainPage">
   <div class="header">
     <div class="header-left">
-      <h1>CaseReview</h1>
+      <h1><em>CRP</em> Creator Gallery</h1>
       <p id="headerDesc">多语言 x 内容垂类 x 流量层级 — 共 75 组 / 750 个作者</p>
     </div>
     <div class="header-actions">
-      <label class="header-btn" for="csvFileInput">
+      <button class="header-btn" onclick="exportResults()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+        导出结果
+      </button>
+      <label class="header-btn header-btn-solid" for="csvFileInput">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         上传 CSV
       </label>
       <input type="file" id="csvFileInput" accept=".csv">
-      <button class="header-btn header-btn-solid" onclick="exportResults()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        导出结果
-      </button>
     </div>
   </div>
 
@@ -244,16 +250,9 @@
     <div class="detail-topbar">
       <button class="detail-back" onclick="closeDetail()">&larr;</button>
       <div class="detail-context" id="detailContext"></div>
-      <div class="detail-nav">
-        <button class="detail-nav-btn" id="prevCaseBtn" onclick="navCase(-1)">&larr; 上一个</button>
-        <button class="detail-nav-btn" id="nextCaseBtn" onclick="navCase(1)">下一个 &rarr;</button>
-      </div>
+      <div class="detail-progress" id="detailProgress"></div>
     </div>
-    <div class="detail-body">
-      <div class="author-card" id="authorCard"></div>
-      <div class="video-section" id="videoSection"></div>
-      <div class="annotation-section" id="annotationSection"></div>
-    </div>
+    <div class="detail-body" id="detailBody"></div>
   </div>
 </div>
 
@@ -304,7 +303,14 @@ function generateFakeData() {
           const pgcScore = pgcOptions[Math.floor(Math.random() * 3)];
           const prodScore = Math.floor(Math.random() * 3);
           const contentScore = Math.floor(Math.random() * 3);
-          const vids = Array.from({ length: 5 }, () => String(Math.floor(Math.random() * 9000000000000000) + 1000000000000000));
+          const vids = Array.from({ length: 5 }, () => ({
+            vid: String(Math.floor(Math.random() * 9000000000000000) + 1000000000000000),
+            model_prod: Math.floor(Math.random() * 3),
+            model_cont: Math.floor(Math.random() * 3),
+            model_pgc: pgcOptions[Math.floor(Math.random() * 3)],
+            anno_prod: null,
+            anno_cont: null
+          }));
           return {
             user_id: uid,
             username: name,
@@ -330,23 +336,43 @@ let groups = [];
 let currentGroupId = null;
 let currentCaseIdx = 0;
 
+// Always generate 75 empty group skeleton
+function generateSkeleton() {
+  let gid = 1;
+  const skeleton = [];
+  LANGS.forEach(lang => {
+    CATS.forEach(cat => {
+      TIERS.forEach(tier => {
+        skeleton.push({ id: gid++, lang, cat, tier, cases: [] });
+      });
+    });
+  });
+  return skeleton;
+}
+
 function save() {
-  localStorage.setItem('casereview_v2', JSON.stringify(groups));
+  localStorage.setItem('casereview_v3', JSON.stringify(groups));
 }
 function load() {
-  const d = localStorage.getItem('casereview_v2');
+  const d = localStorage.getItem('casereview_v3');
   if (d) { try { groups = JSON.parse(d); return true; } catch(e) {} }
   return false;
 }
 if (!load()) {
-  groups = generateFakeData();
+  groups = generateSkeleton();
   save();
 }
 
 // ============== HELPERS ==============
-function getCaseStatus(c) { return c.annotation ? 'done' : 'todo'; }
-function getGroupDone(g) { return g.cases.filter(c => c.annotation).length; }
+function getCaseStatus(c) {
+  const a = c.annotation || {};
+  if (a.prod_score !== undefined && a.content_score !== undefined) return 'done';
+  if (c.annotation && Object.keys(c.annotation).length > 0) return 'partial';
+  return 'todo';
+}
+function getGroupDone(g) { return g.cases.filter(c => getCaseStatus(c) === 'done').length; }
 function getGroupStatus(g) {
+  if (g.cases.length === 0) return 'todo';
   const done = getGroupDone(g);
   if (done === 0) return 'todo';
   if (done === g.cases.length) return 'done';
@@ -395,14 +421,14 @@ function updateStats() {
   const filtered = getFiltered();
   const totalCases = groups.reduce((s, g) => s + g.cases.length, 0);
   const totalDone = groups.reduce((s, g) => s + getGroupDone(g), 0);
-  const doneGroups = groups.filter(g => getGroupStatus(g) === 'done').length;
-  document.getElementById('statTotal').textContent = groups.length;
-  document.getElementById('statCases').textContent = totalCases;
+  const groupsWithData = groups.filter(g => g.cases.length > 0).length;
+  document.getElementById('statTotal').textContent = '75';
+  document.getElementById('statCases').textContent = totalCases || '750';
   document.getElementById('statDone').textContent = totalDone;
   document.getElementById('statProgress').textContent = totalCases ? Math.round(totalDone / totalCases * 100) + '%' : '0%';
   document.getElementById('statFiltered').textContent = filtered.length;
   document.getElementById('headerDesc').textContent =
-    `多语言 x 内容垂类 x 流量层级 — 共 ${groups.length} 组 / ${totalCases} 个作者`;
+    `多语言 x 内容垂类 x 流量层级 — 共 75 组 / ${totalCases || 750} 个作者（${groupsWithData} 组有数据）`;
 }
 
 // ============== MATRIX VIEW ==============
@@ -419,7 +445,7 @@ function renderMatrix() {
       <div class="lang-block-header">
         <span class="lang-emoji">${LANG_EMOJI[lang] || ''}</span>
         <span class="lang-name">${lang}</span>
-        <span class="lang-progress">${langDone} / ${langTotal} 作者</span>
+        <span class="lang-progress">${langTotal > 0 ? `${langDone} / ${langTotal} 作者` : '暂无数据'}</span>
       </div>
       <div class="block-grid">`;
     CATS.forEach(cat => { html += `<div class="block-col-header">${CAT_EMOJI[cat] || ''} ${cat}</div>`; });
@@ -430,17 +456,20 @@ function renderMatrix() {
           const st = getGroupStatus(g);
           const done = getGroupDone(g);
           const total = g.cases.length;
-          const content = st === 'done'
+          const hasData = total > 0;
+          const content = !hasData
+            ? `<span class="block-count" style="color:#ddd">0/10</span>`
+            : st === 'done'
             ? `<span class="block-check">✓</span>`
             : `<span class="block-count">${done}/${total}</span>`;
-          html += `<div class="block-cell ${st}" onclick="openGroup(${g.id})">
+          html += `<div class="block-cell ${hasData ? st : 'todo'}" onclick="openGroup(${g.id})" ${!hasData ? 'style="opacity:0.5"' : ''}>
             <span class="block-tier"><span class="tag ${TIER_CLASS[tier]}" style="font-size:11px;padding:2px 8px">${tier}</span></span>
             ${content}
           </div>`;
         } else {
-          html += `<div class="block-cell" style="opacity:0.15;cursor:default">
-            <span class="block-tier">${tier}</span>
-            <span class="block-count">—</span>
+          html += `<div class="block-cell todo" style="opacity:0.3;cursor:default">
+            <span class="block-tier"><span class="tag ${TIER_CLASS[tier]}" style="font-size:11px;padding:2px 8px">${tier}</span></span>
+            <span class="block-count">0/10</span>
           </div>`;
         }
       });
@@ -483,9 +512,8 @@ function renderList() {
         <div class="list-tier-label"><span class="tag ${TIER_CLASS[g.tier]}">${g.tier}</span></div>`;
       g.cases.forEach((c, ci) => {
         const st = getCaseStatus(c);
-        html += `<div class="list-row" onclick="openGroup(${g.id}, ${ci})">
+        html += `<div class="list-row" onclick="openGroup(${g.id})">
           <span class="status-dot status-${st}"></span>
-          <span class="list-row-id">${c.user_id}</span>
           <span class="list-row-name">${c.username}</span>
           <span class="list-row-meta">${formatNum(c.followers)} 粉丝</span>
         </div>`;
@@ -518,6 +546,26 @@ document.querySelectorAll('.view-btn').forEach(btn => {
 });
 
 // ============== CSV IMPORT ==============
+function parseCSVLine(line) {
+  const result = []; let current = ''; let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (inQuotes) {
+      if (ch === '"' && line[i+1] === '"') { current += '"'; i++; }
+      else if (ch === '"') { inQuotes = false; }
+      else { current += ch; }
+    } else {
+      if (ch === '"') { inQuotes = true; }
+      else if (ch === ',') { result.push(current.trim()); current = ''; }
+      else { current += ch; }
+    }
+  }
+  result.push(current.trim());
+  return result;
+}
+
+const LANG_MAP = { 'en': '英语', 'ko': '韩语', 'de': '德语', 'es': '西语', 'ja': '日语' };
+
 document.getElementById('csvFileInput').addEventListener('change', function(e) {
   const file = e.target.files[0];
   if (!file) return;
@@ -525,42 +573,85 @@ document.getElementById('csvFileInput').addEventListener('change', function(e) {
   reader.onload = function(ev) {
     try {
       const lines = ev.target.result.split('\n').filter(l => l.trim());
-      if (lines.length < 2) { alert('CSV 文件为空或格式不对'); return; }
-      const headers = lines[0].split(',').map(h => h.trim().toLowerCase());
+      if (lines.length < 2) { alert('CSV 为空'); return; }
+      const headers = parseCSVLine(lines[0]).map(h => h.toLowerCase().replace(/"/g, ''));
       const rows = lines.slice(1).map(l => {
-        const vals = l.split(',').map(v => v.trim());
+        const vals = parseCSVLine(l);
         const obj = {};
-        headers.forEach((h, i) => obj[h] = vals[i] || '');
+        headers.forEach((h, i) => obj[h] = (vals[i] || '').replace(/"/g, ''));
         return obj;
       });
-      // Group by language + category + tier
-      const newGroups = {};
+
+      // Group rows by user_id, collect videos per user
+      const userMap = {};
       rows.forEach(r => {
-        const lang = r.language || '英语';
-        const cat = r.category || '其他';
-        const tier = r.tier || '中部';
-        const key = `${lang}|${cat}|${tier}`;
-        if (!newGroups[key]) newGroups[key] = { lang, cat, tier, cases: [] };
-        newGroups[key].cases.push({
-          user_id: r.user_id || '',
-          username: r.username || r.user_id || '',
-          followers: parseInt(r.followers) || 0,
-          monthly_income: parseFloat(r.monthly_income) || 0,
-          monthly_posts: parseInt(r.monthly_posts) || 0,
-          pgc_score: r.pgc_score || '',
-          production_score: parseInt(r.production_score) || 0,
-          content_score: parseInt(r.content_score) || 0,
-          vids: [r.vid_1, r.vid_2, r.vid_3, r.vid_4, r.vid_5].filter(Boolean),
-          annotation: null
-        });
+        const uid = r.user_id;
+        if (!uid) return;
+        if (!userMap[uid]) {
+          // Parse sample_group like "日语_体育_中部" or derive from columns
+          let lang = '', cat = '', tier = '';
+          if (r.sample_group && r.sample_group.includes('_')) {
+            const parts = r.sample_group.split('_');
+            lang = parts[0]; cat = parts[1]; tier = parts[2];
+          } else {
+            lang = LANG_MAP[r.main_content_language] || r.main_content_language || '其他';
+            cat = r.vertical_group || '其他';
+            tier = r.income_tier || '中部';
+          }
+          userMap[uid] = {
+            user_id: uid,
+            username: uid,
+            lang, cat, tier,
+            followers: parseInt(r.followed_counter_td) || 0,
+            monthly_income: parseFloat(r.total_usd_amount_30d) || 0,
+            monthly_posts: 0,
+            pgc_score: '',
+            vids: [],
+            annotation: null
+          };
+        }
+        // Add video if not NULL
+        if (r.vid && r.vid !== 'NULL') {
+          userMap[uid].vids.push({
+            vid: r.vid,
+            model_prod: r.production_score !== 'NULL' ? parseInt(parseFloat(r.production_score)) : null,
+            model_cont: r.content_score !== 'NULL' ? parseInt(parseFloat(r.content_score)) : null,
+            model_pgc: r.pgc_tier !== 'NULL' ? r.pgc_tier : '',
+            anno_prod: null,
+            anno_cont: null
+          });
+        }
       });
-      groups = Object.values(newGroups).map((g, i) => ({ id: i + 1, ...g }));
+
+      // Derive author-level PGC from most common video PGC
+      Object.values(userMap).forEach(u => {
+        const pgcs = u.vids.map(v => v.model_pgc).filter(Boolean);
+        if (pgcs.length) {
+          const counts = {};
+          pgcs.forEach(p => counts[p] = (counts[p] || 0) + 1);
+          u.pgc_score = Object.entries(counts).sort((a,b) => b[1] - a[1])[0][0];
+        }
+      });
+
+      // Merge into 75-group skeleton
+      groups = generateSkeleton();
+      let filledGroups = 0;
+      Object.values(userMap).forEach(u => {
+        const g = groups.find(x => x.lang === u.lang && x.cat === u.cat && x.tier === u.tier);
+        if (g) {
+          g.cases.push(u);
+          filledGroups++;
+        }
+      });
+      const groupsWithData = groups.filter(g => g.cases.length > 0).length;
       save();
       populateFilters();
       renderAll();
-      alert(`导入成功！共 ${groups.length} 组，${rows.length} 个作者`);
+      const totalVids = Object.values(userMap).reduce((s, u) => s + u.vids.length, 0);
+      alert(`导入成功！${Object.keys(userMap).length} 个作者，${totalVids} 个视频，填充了 ${groupsWithData} / 75 组`);
     } catch(err) {
       alert('CSV 解析失败: ' + err.message);
+      console.error(err);
     }
   };
   reader.readAsText(file);
@@ -592,11 +683,19 @@ function exportResults() {
   URL.revokeObjectURL(url);
 }
 
-// ============== DETAIL PAGE ==============
-function openGroup(gid, caseIdx) {
+// ============== DETAIL PAGE (scrollable rows) ==============
+function derivePgcType(prodScore, contentScore) {
+  const p = parseInt(prodScore), ct = parseInt(contentScore);
+  if (isNaN(p) || isNaN(ct)) return null;
+  if ((p === 2 && ct >= 1) || (p >= 1 && ct === 2)) return 'PGC80';
+  if (p === 1 && ct === 1) return 'PGC60';
+  if (p === 0 || ct === 0) return 'nonPGC';
+  return null;
+}
+
+function openGroup(gid) {
   currentGroupId = gid;
-  currentCaseIdx = caseIdx || 0;
-  renderDetail();
+  renderGroupDetail();
   document.getElementById('detailOverlay').classList.add('show');
   document.body.style.overflow = 'hidden';
 }
@@ -607,198 +706,142 @@ function closeDetail() {
   renderAll();
 }
 
-function navCase(dir) {
+function renderGroupDetail() {
   const g = groups.find(x => x.id === currentGroupId);
-  const newIdx = currentCaseIdx + dir;
-  if (newIdx < 0 || newIdx >= g.cases.length) return;
-  currentCaseIdx = newIdx;
-  renderDetail();
-}
+  const doneCount = countAuthorsDone(g);
 
-function renderDetail() {
-  const g = groups.find(x => x.id === currentGroupId);
-  const c = g.cases[currentCaseIdx];
-
-  // Context bar
-  const tierName = { '头部': '头部', '中部': '中部', '尾部': '尾部' };
-  const catName = g.cat;
-  const langName = g.lang;
   document.getElementById('detailContext').innerHTML =
-    `正在标注 <strong>${LANG_EMOJI[langName]} ${langName}</strong> 的 <strong>${CAT_EMOJI[catName]} ${catName}</strong> 类 <strong>${tierName[g.tier]}作者</strong> &nbsp;·&nbsp; 第 ${currentCaseIdx + 1} / ${g.cases.length} 位`;
+    `正在标注 <strong>${LANG_EMOJI[g.lang]} ${g.lang}</strong> 的 <strong>${CAT_EMOJI[g.cat]} ${g.cat}</strong> 类 <strong>${g.tier}作者</strong>`;
+  document.getElementById('detailProgress').textContent = g.cases.length > 0 ? `${doneCount} / ${g.cases.length} 已完成` : '暂无数据';
 
-  // Nav buttons
-  document.getElementById('prevCaseBtn').disabled = currentCaseIdx === 0;
-  document.getElementById('nextCaseBtn').disabled = currentCaseIdx === g.cases.length - 1;
+  const body = document.getElementById('detailBody');
 
-  // Author card
-  const initial = (c.username || c.user_id || '?')[0].toUpperCase();
-  const pgcClass = c.pgc_score === 'PGC80' ? 'pgc80' : c.pgc_score === 'PGC60' ? 'pgc60' : 'nonpgc';
-  document.getElementById('authorCard').innerHTML = `
-    <div class="author-header">
-      <div class="author-avatar">${initial}</div>
-      <div>
-        <div class="author-name">${c.username || 'Unknown'}</div>
-        <div class="author-uid">UID: ${c.user_id}</div>
-      </div>
-      <div style="margin-left:auto">
-        <span class="tag tag-lang">${g.lang}</span>
-        <span class="tag tag-cat">${g.cat}</span>
-        <span class="tag ${TIER_CLASS[g.tier]}">${g.tier}</span>
-      </div>
-    </div>
-    <div class="author-metrics">
-      <div class="metric-item"><div class="metric-label">粉丝</div><div class="metric-value">${formatNum(c.followers)}</div></div>
-      <div class="metric-item"><div class="metric-label">月收入 ($)</div><div class="metric-value">${formatNum(c.monthly_income)}</div></div>
-      <div class="metric-item"><div class="metric-label">月投稿数</div><div class="metric-value">${c.monthly_posts}</div></div>
-      <div class="metric-item"><div class="metric-label">PGC 分</div><div class="metric-value ${pgcClass}">${c.pgc_score}</div></div>
-      <div class="metric-item"><div class="metric-label">Production Score</div><div class="metric-value">${c.production_score}</div></div>
-      <div class="metric-item"><div class="metric-label">Content Score</div><div class="metric-value">${c.content_score}</div></div>
+  if (g.cases.length === 0) {
+    body.innerHTML = `<div style="text-align:center;padding:80px 40px;color:#aaa">
+      <div style="font-size:48px;margin-bottom:16px">📭</div>
+      <div style="font-size:18px;font-weight:600;color:#666">该组暂无作者数据</div>
+      <div style="font-size:14px;margin-top:8px">上传 CSV 后，匹配 ${g.lang} · ${g.cat} · ${g.tier} 的作者会出现在这里</div>
     </div>`;
-
-  // Videos
-  const vids = c.vids || [];
-  let activeVid = 0;
-  const videoHtml = `
-    <h3>作者近期视频 (${vids.length})</h3>
-    ${vids.length ? `
-      <div class="video-tabs" id="videoTabs">
-        ${vids.map((v, i) => `<button class="video-tab ${i === 0 ? 'active' : ''}" data-idx="${i}" onclick="switchVideo(${i})">视频 ${i + 1}</button>`).join('')}
-      </div>
-      <div class="video-container" id="videoContainer">
-        <iframe id="videoFrame" src="https://www.tiktok.com/embed/v2/${vids[0]}" width="340" height="600" allowfullscreen></iframe>
-      </div>
-    ` : `
-      <div class="video-placeholder">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="4"/><polygon points="10 8 16 12 10 16"/></svg>
-        <span>暂无视频数据</span>
-      </div>
-    `}`;
-  document.getElementById('videoSection').innerHTML = videoHtml;
-
-  // Annotation
-  const a = c.annotation || {};
-  document.getElementById('annotationSection').innerHTML = `
-    <h3>标注</h3>
-    <div class="annotation-grid">
-      <div class="annotation-field">
-        <div class="annotation-label">PGC Type</div>
-        <div class="annotation-options" id="annoPgc">
-          ${PGC_TYPES.map(t => `<button class="anno-btn ${a.pgc_type === t ? 'selected' : ''}" data-field="pgc_type" data-val="${t}" onclick="setAnno(this)">${t}</button>`).join('')}
-        </div>
-      </div>
-      <div class="annotation-field">
-        <div class="annotation-label">Production Score</div>
-        <div class="annotation-options" id="annoProd">
-          ${PROD_SCORES.map(t => `<button class="anno-btn ${a.prod_score === t ? 'selected' : ''}" data-field="prod_score" data-val="${t}" onclick="setAnno(this)">${t}</button>`).join('')}
-        </div>
-      </div>
-      <div class="annotation-field">
-        <div class="annotation-label">Content Score</div>
-        <div class="annotation-options" id="annoContent">
-          ${CONTENT_SCORES.map(t => `<button class="anno-btn ${a.content_score === t ? 'selected' : ''}" data-field="content_score" data-val="${t}" onclick="setAnno(this)">${t}</button>`).join('')}
-        </div>
-      </div>
-      <div class="annotation-field">
-        <div class="annotation-label">画风类别</div>
-        <select class="anno-select" id="annoStyle" onchange="setAnnoSelect(this)">
-          <option value="">请选择...</option>
-          ${STYLE_OPTIONS.map(t => `<option value="${t}" ${a.style === t ? 'selected' : ''}>${t}</option>`).join('')}
-        </select>
-      </div>
-    </div>
-    <div class="annotation-actions">
-      <span class="save-hint" id="saveHint">已自动保存 ✓</span>
-      <button class="btn btn-danger" onclick="resetAnnotation()">清除标注</button>
-      <button class="btn btn-skip" onclick="skipCase()">跳过</button>
-      <button class="btn btn-primary" onclick="saveAndNext()">保存并下一个 &rarr;</button>
-    </div>`;
-}
-
-function switchVideo(idx) {
-  const g = groups.find(x => x.id === currentGroupId);
-  const c = g.cases[currentCaseIdx];
-  const vids = c.vids || [];
-  if (!vids[idx]) return;
-  document.getElementById('videoFrame').src = `https://www.tiktok.com/embed/v2/${vids[idx]}`;
-  document.querySelectorAll('.video-tab').forEach((t, i) => {
-    t.classList.toggle('active', i === idx);
-  });
-}
-
-function setAnno(btn) {
-  const g = groups.find(x => x.id === currentGroupId);
-  const c = g.cases[currentCaseIdx];
-  if (!c.annotation) c.annotation = {};
-  const field = btn.dataset.field;
-  const val = btn.dataset.val;
-  // Toggle: click again to deselect
-  if (c.annotation[field] === val) {
-    delete c.annotation[field];
-  } else {
-    c.annotation[field] = val;
+    return;
   }
-  // Clean up empty annotation
+  body.innerHTML = g.cases.map((c, ci) => {
+    const vids = c.vids || [];
+    const pgcLower = (c.pgc_score || '').toLowerCase();
+    const pgcClass = pgcLower.includes('80') ? 'pgc80' : pgcLower.includes('60') ? 'pgc60' : 'nonpgc';
+    const a = c.annotation || {};
+    const isDone = isAuthorDone(c);
+    const autoPgc = derivePgcType(a.prod_score, a.content_score);
+    const autoPgcClass = autoPgc === 'PGC80' ? 'pgc80' : autoPgc === 'PGC60' ? 'pgc60' : autoPgc === 'nonPGC' ? 'nonpgc' : 'pending';
+
+    return `
+    <div class="author-row ${isDone ? 'done' : ''}" id="row-${ci}">
+      <div class="row-info">
+        <div class="row-top">
+          <div class="row-avatar">${(c.username || '?')[0].toUpperCase()}</div>
+          <div>
+            <div class="row-num">${isDone ? '✓' : '#' + (ci + 1)}</div>
+            <div class="row-author-name" title="${c.user_id}">${c.username !== c.user_id ? c.username : c.user_id.slice(-6)}</div>
+          </div>
+        </div>
+        <div class="row-meta">
+          ${formatNum(c.followers)} <span>粉丝</span><br>
+          ${c.monthly_posts} <span>投稿/月</span><br>
+          $${formatNum(c.monthly_income)} <span>/月</span>
+        </div>
+      </div>
+      <div class="row-videos">
+        ${vids.length === 0 ? '<div class="no-video">暂无视频数据</div>' : vids.map((v, vi) => `<div class="vid-col">
+            <div class="vid-embed">
+              <iframe src="https://www.tiktok.com/embed/v2/${v.vid}" allowfullscreen loading="lazy"></iframe>
+            </div>
+            <div class="vid-id" title="${v.vid}">${v.vid}</div>
+            <div class="vid-model">
+              <div class="vid-model-row"><span class="vid-model-label">Prod</span><span class="vid-model-val score-${v.model_prod}">${v.model_prod}</span></div>
+              <div class="vid-model-row"><span class="vid-model-label">Cont</span><span class="vid-model-val score-${v.model_cont}">${v.model_cont}</span></div>
+              <div class="vid-model-row"><span class="vid-model-label">PGC</span><span class="vid-model-val ${String(v.model_pgc).includes('80') ? 'pgc80' : String(v.model_pgc).includes('60') ? 'pgc60' : 'nonpgc'}">${v.model_pgc || '—'}</span></div>
+            </div>
+          </div>`).join('')}
+      </div>
+      <div class="row-anno-panel">
+        <span class="row-pgc-badge ${pgcClass}">模型: ${c.pgc_score}</span>
+        <div class="row-anno-section">
+          <div class="row-anno-title">人工标注</div>
+          <div class="row-anno-row">
+            <span class="row-anno-label">制作分</span>
+            <div class="annotation-options">
+              ${PROD_SCORES.map(s => `<button class="anno-btn ${a.prod_score === s ? 'selected' : ''}" data-ci="${ci}" data-field="prod_score" data-val="${s}" onclick="setAuthorAnno(this)">${s}</button>`).join('')}
+            </div>
+          </div>
+          <div class="row-anno-row">
+            <span class="row-anno-label">内容分</span>
+            <div class="annotation-options">
+              ${CONTENT_SCORES.map(s => `<button class="anno-btn ${a.content_score === s ? 'selected' : ''}" data-ci="${ci}" data-field="content_score" data-val="${s}" onclick="setAuthorAnno(this)">${s}</button>`).join('')}
+            </div>
+          </div>
+          <div class="row-anno-row">
+            <span class="row-anno-label">→</span>
+            <span class="pgc-auto ${autoPgcClass}" id="pgc-auto-${ci}">${autoPgc || '—'}</span>
+          </div>
+          <select class="row-style-select" data-ci="${ci}" onchange="setRowStyle(this)">
+            <option value="">画风...</option>
+            ${STYLE_OPTIONS.map(t => `<option value="${t}" ${a.style === t ? 'selected' : ''}>${t}</option>`).join('')}
+          </select>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function isAuthorDone(c) {
+  const a = c.annotation || {};
+  return a.prod_score !== undefined && a.content_score !== undefined;
+}
+function countAuthorsDone(g) {
+  return g.cases.filter(c => isAuthorDone(c)).length;
+}
+
+function setAuthorAnno(btn) {
+  const ci = parseInt(btn.dataset.ci);
+  const g = groups.find(x => x.id === currentGroupId);
+  const c = g.cases[ci];
+  if (!c.annotation) c.annotation = {};
+  const field = btn.dataset.field, val = btn.dataset.val;
+  if (c.annotation[field] === val) delete c.annotation[field];
+  else c.annotation[field] = val;
+  // Auto PGC
+  const autoPgc = derivePgcType(c.annotation.prod_score, c.annotation.content_score);
+  if (autoPgc) c.annotation.pgc_type = autoPgc;
+  else delete c.annotation.pgc_type;
   if (Object.keys(c.annotation).length === 0) c.annotation = null;
   save();
-  // Update buttons in this group
+  // Update buttons
   btn.parentElement.querySelectorAll('.anno-btn').forEach(b => {
     b.classList.toggle('selected', c.annotation && c.annotation[b.dataset.field] === b.dataset.val);
   });
-  flashSave();
+  // Update PGC auto
+  const pgcEl = document.getElementById(`pgc-auto-${ci}`);
+  if (pgcEl) {
+    const pgc = c.annotation ? c.annotation.pgc_type : null;
+    pgcEl.className = 'pgc-auto ' + (pgc === 'PGC80' ? 'pgc80' : pgc === 'PGC60' ? 'pgc60' : pgc === 'nonPGC' ? 'nonpgc' : 'pending');
+    pgcEl.textContent = pgc || '—';
+  }
+  // Update row done
+  const isDone = isAuthorDone(c);
+  const row = document.getElementById(`row-${ci}`);
+  row.classList.toggle('done', isDone);
+  row.querySelector('.row-num').textContent = (isDone ? '✓ ' : '') + `#${ci + 1}`;
+  document.getElementById('detailProgress').textContent = `${countAuthorsDone(g)} / ${g.cases.length} 已完成`;
 }
 
-function setAnnoSelect(sel) {
+function setRowStyle(sel) {
+  const ci = parseInt(sel.dataset.ci);
   const g = groups.find(x => x.id === currentGroupId);
-  const c = g.cases[currentCaseIdx];
+  const c = g.cases[ci];
   if (!c.annotation) c.annotation = {};
-  if (sel.value) {
-    c.annotation.style = sel.value;
-  } else {
-    delete c.annotation.style;
-  }
+  if (sel.value) c.annotation.style = sel.value;
+  else delete c.annotation.style;
   if (Object.keys(c.annotation).length === 0) c.annotation = null;
   save();
-  flashSave();
-}
-
-function flashSave() {
-  const hint = document.getElementById('saveHint');
-  hint.classList.add('show');
-  clearTimeout(hint._timer);
-  hint._timer = setTimeout(() => hint.classList.remove('show'), 1500);
-}
-
-function resetAnnotation() {
-  const g = groups.find(x => x.id === currentGroupId);
-  g.cases[currentCaseIdx].annotation = null;
-  save();
-  renderDetail();
-}
-
-function skipCase() {
-  const g = groups.find(x => x.id === currentGroupId);
-  if (currentCaseIdx < g.cases.length - 1) {
-    currentCaseIdx++;
-    renderDetail();
-    document.getElementById('detailOverlay').scrollTop = 0;
-  } else {
-    closeDetail();
-  }
-}
-
-function saveAndNext() {
-  const g = groups.find(x => x.id === currentGroupId);
-  const c = g.cases[currentCaseIdx];
-  // Ensure annotation exists (even if partial)
-  if (!c.annotation) c.annotation = {};
-  save();
-  if (currentCaseIdx < g.cases.length - 1) {
-    currentCaseIdx++;
-    renderDetail();
-    document.getElementById('detailOverlay').scrollTop = 0;
-  } else {
-    closeDetail();
-  }
 }
 
 // ============== INIT ==============

@@ -604,7 +604,7 @@ document.getElementById('csvFileInput').addEventListener('change', function(e) {
             lang, cat, tier,
             followers: parseInt(r.followed_counter_td) || 0,
             monthly_income: parseFloat(r.total_usd_amount_30d) || 0,
-            monthly_posts: 0,
+            monthly_posts: parseInt(r.publish_cnt_30d) || 0,
             pgc_score: '',
             vids: [],
             annotation: null
